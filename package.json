@@ -1,0 +1,21 @@
+{
+  "name": "matte",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "next": "^9.0.5",
+    "react": "^16.9.0",
+    "react-div-100vh": "^0.3.4",
+    "react-dom": "^16.9.0"
+  }
+}
