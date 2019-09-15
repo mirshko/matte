@@ -1,7 +1,29 @@
 import Div100vh from "react-div-100vh";
+import Head from "next/head";
 
 const Layout = ({ children }) => (
   <Div100vh>
+    <Head>
+      <title>Matte</title>
+      <meta name="theme-color" content="#301934" />
+      <link rel="icon" href="/static/favicon.png" />
+      <link rel="apple-touch-icon" href="/static/apple-touch-icon.png" />
+      <link
+        rel="apple-touch-icon"
+        sizes="152x152"
+        href="/static/apple-touch-icon@152.png"
+      />
+      <link
+        rel="apple-touch-icon"
+        sizes="180x180"
+        href="/static/apple-touch-icon@180.png"
+      />
+      <link
+        rel="apple-touch-icon"
+        sizes="167x167"
+        href="/static/apple-touch-icon@167.png"
+      />
+    </Head>
     <style jsx global>{`
       *,
       ::before,
@@ -21,7 +43,8 @@ const Layout = ({ children }) => (
         line-height: 1.47059;
         letter-spacing: -0.022em;
         -webkit-font-smoothing: antialiased;
-        background-color: whitesmoke;
+        background-color: #301934;
+        color: white;
       }
 
       :focus {
