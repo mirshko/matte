@@ -1,0 +1,21 @@
+{
+  "name": "Matte",
+  "short_name": "matte",
+  "icons": [
+    {
+      "src": "/static/apple-touch-icon@192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "/static/apple-touch-icon.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "background_color": "#FFFFFF",
+  "description": "Give your photos that gallery quality aesthetic.",
+  "display": "fullscreen",
+  "start_url": "/",
+  "theme_color": "#301934"
+}
