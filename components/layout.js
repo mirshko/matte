@@ -5,6 +5,11 @@ const Layout = ({ children }) => (
   <Div100vh>
     <Head>
       <title>Matte</title>
+      <meta
+        name="description"
+        content="Give your photos that gallery quality aesthetic"
+      />
+      <link rel="manifest" href="/static/manifest.json" />
       <meta name="theme-color" content="#301934" />
       <link rel="icon" href="/static/favicon.png" />
       <link rel="apple-touch-icon" href="/static/apple-touch-icon.png" />
