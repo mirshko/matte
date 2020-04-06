@@ -1,0 +1,11 @@
+name: Clean Uploads
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Call function
+      run: curl --verbose https://matte.pics/api/clean-uploads
