@@ -2,6 +2,8 @@ import { v2 as cloudinary } from "cloudinary";
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
 
+dayjs.extend(utc);
+
 const api = cloudinary.api;
 
 export default async (req, res) => {
