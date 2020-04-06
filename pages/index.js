@@ -1,5 +1,6 @@
 import { Fragment, useRef, useState } from "react";
 import { useDrop } from "react-use";
+import Alert from "../components/Alert";
 import { Button } from "../components/buttons";
 import { FileInput } from "../components/inputs";
 import Layout from "../components/layout";
@@ -9,19 +10,28 @@ const Page = () => {
   const [file, setFile] = useState(undefined);
   const [imagePreview, setImagePreview] = useState(undefined);
   const [loading, setLoading] = useState(false);
+  const [showAllowedDialog, setShowAllowedDialog] = useState(false);
+  const [showSizeDialog, setShowSizeDialog] = useState(false);
+
   const downloadRef = useRef(null);
   const state = useDrop({
     onFiles: (files) => handleSetFile(files[0]),
   });
 
+  const openAllowedDialog = () => setShowAllowedDialog(true);
+  const openSizeDialog = () => setShowSizeDialog(true);
+
+  const closeAllowedDialog = () => setShowAllowedDialog(false);
+  const closeSizeDialog = () => setShowSizeDialog(false);
+
   const handleSetFile = (file) => {
     if (!ALLOWED_IMAGE_FORMATS.includes(file.type)) {
-      window.alert("Not An Image\nThis file type is not allowed.");
+      openAllowedDialog();
       return;
     }
 
     if (file.size > 1e7) {
-      window.alert("Picture Too Large\nYour file is greater than 10 MB.");
+      openSizeDialog();
       return;
     }
 
@@ -60,6 +70,22 @@ const Page = () => {
 
   return (
     <Layout>
+      {showAllowedDialog && (
+        <Alert
+          label="Not An Image"
+          description="This file type is not allowed."
+          close={closeAllowedDialog}
+        />
+      )}
+
+      {showSizeDialog && (
+        <Alert
+          label="Picture Too Large"
+          description="Your file is greater than 10 MB."
+          close={closeSizeDialog}
+        />
+      )}
+
       <div className="top-left z-max">
         <img
           className="icon"
@@ -132,12 +158,6 @@ const Page = () => {
           -moz-osx-font-smoothing: grayscale;
           color: white;
           background-color: var(--primary);
-        }
-
-        :focus {
-          outline-offset: 1px;
-          outline: 3px solid #c1e0fe;
-          outline: 3px solid rgba(131, 192, 253, 0.5);
         }
 
         .img {
