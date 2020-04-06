@@ -2,7 +2,7 @@ name: Delete Uploads
 
 on:
   schedule:
-    - cron: "*/2 * * * *"
+    - cron: "*/5 * * * *"
 jobs:
   run:
     runs-on: ubuntu-latest
