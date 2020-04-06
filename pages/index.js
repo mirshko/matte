@@ -131,8 +131,8 @@ const Page = () => {
 
         .img {
           width: auto;
-          height: 100vmin;
-          max-width: 100vmin;
+          height: 90vmin;
+          max-width: 90vmin;
           object-fit: contain;
           vertical-align: middle;
         }
