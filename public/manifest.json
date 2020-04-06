@@ -1,14 +1,14 @@
 {
-  "name": "Matte",
+  "name": "Matte.pics",
   "short_name": "matte",
   "icons": [
     {
-      "src": "/static/apple-touch-icon@192.png",
+      "src": "/apple-touch-icon@192.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "/static/apple-touch-icon.png",
+      "src": "/apple-touch-icon.png",
       "type": "image/png",
       "sizes": "512x512"
     }

@@ -48,10 +48,19 @@ const Page = () => {
 
   return (
     <Layout>
+      <div className="top-left">
+        <img
+          className="icon"
+          src="/favicon.png"
+          alt="Matte.pics"
+          title="Matte.pics"
+        />
+      </div>
+
       {Boolean(file) && (
         <Fragment>
           <div className="top-right">
-            <Button onClick={clearFile}>New Image</Button>
+            <Button onClick={clearFile}>New Matte</Button>
           </div>
 
           <div className="bottom-centered">
@@ -70,34 +79,74 @@ const Page = () => {
         {/* Preview Mated Image */}
         {Boolean(imagePreview) && (
           <Fragment>
-            <img src={imagePreview} alt="" />
-            <a href={imagePreview} download hidden ref={downloadRef}>
-              Download
-            </a>
+            <img className="img" src={imagePreview} alt="" />
+            <a href={imagePreview} download hidden ref={downloadRef} />
           </Fragment>
         )}
 
         {/* Preview Uploaded Image */}
         {Boolean(file) && !Boolean(imagePreview) && (
-          <img src={URL.createObjectURL(file)} alt="" />
+          <img className="img" src={URL.createObjectURL(file)} alt="" />
         )}
 
         {/* Upload File */}
-        {!Boolean(file) && (
-          <FileInput
-            label={state.over ? "Drop Me!" : "Choose Image"}
-            onChange={handleFileChange}
-          />
-        )}
+        {!Boolean(file) && <FileInput onChange={handleFileChange} />}
       </div>
 
       <style jsx global>{`
-        img {
+        body {
+          transition: background-color 200ms;
+          background-color: ${state?.over ? "#4E2452" : "#301934"};
+        }
+      `}</style>
+
+      <style jsx global>{`
+        html {
+          box-sizing: border-box;
+        }
+
+        *,
+        *::before,
+        *::after {
+          box-sizing: inherit;
+        }
+
+        body {
+          margin: 0;
+          font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue",
+            "Helvetica", "Arial", sans-serif;
+          font-size: 17px;
+          line-height: 1.47059;
+          letter-spacing: -0.022em;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
+          color: white;
+        }
+
+        :focus {
+          outline-offset: 1px;
+          outline: 3px solid #c1e0fe;
+          outline: 3px solid rgba(131, 192, 253, 0.5);
+        }
+
+        .img {
           width: auto;
           height: 100vmin;
           max-width: 100vmin;
           object-fit: contain;
           vertical-align: middle;
+        }
+
+        .icon {
+          height: 45px;
+          width: 45px;
+          vertical-align: middle;
+        }
+
+        .top-left {
+          position: fixed;
+          top: 24px;
+          left: 24px;
         }
 
         .top-right {

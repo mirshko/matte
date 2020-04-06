@@ -1,4 +1,4 @@
-export const FileInput = ({ label = "Choose File", onChange, ...rest }) => (
+export const FileInput = ({ onChange, ...rest }) => (
   <>
     <input
       id="file"
@@ -7,15 +7,23 @@ export const FileInput = ({ label = "Choose File", onChange, ...rest }) => (
       onChange={onChange}
       {...rest}
     />
-    <label htmlFor="file">{label}</label>
+    <label htmlFor="file">
+      <span>
+        Drag & Drop or <u>Browse</u>
+      </span>
+    </label>
     <style jsx>{`
       input {
-        width: 0.1px;
-        height: 0.1px;
-        opacity: 0;
+        border: 0px;
+        clip: rect(0px, 0px, 0px, 0px);
+        height: 1px;
+        margin: -1px;
         overflow: hidden;
+        padding: 0px;
         position: absolute;
-        z-index: -1;
+        width: 1px;
+        white-space: nowrap;
+        overflow-wrap: normal;
       }
 
       input + label {
@@ -32,30 +40,11 @@ export const FileInput = ({ label = "Choose File", onChange, ...rest }) => (
         background-color: white;
         border: none;
         appearance: none;
-        background: white;
       }
 
       input:focus + label {
         outline: none;
-      }
-
-      input + label::before,
-      input + label::after {
-        content: "";
-        display: block;
-        position: absolute;
-        border-radius: inherit;
-      }
-
-      input + label::before {
-        z-index: 0;
-        width: 100%;
-        height: 100%;
-      }
-
-      input:focus + label::before {
         box-shadow: 0 0 0 3px rgba(131, 192, 253, 0.5);
-        outline: none;
       }
     `}</style>
   </>
