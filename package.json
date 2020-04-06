@@ -1,16 +1,17 @@
 {
   "name": "matte",
   "version": "1.0.0",
-  "description": "",
+  "author": "@mirshko <jeff@reiner.design>",
+  "description": "Give your photos that gallery quality aesthetic",
+  "private": false,
   "main": "index.js",
   "scripts": {
     "dev": "next",
     "build": "next build",
     "start": "next start",
+    "format": "prettier --write \"**/*.js\"",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
-  "author": "",
   "license": "ISC",
   "dependencies": {
     "cloudinary": "^1.21.0",
@@ -21,5 +22,16 @@
     "react-div-100vh": "^0.3.8",
     "react-dom": "^16.13.1",
     "react-use": "^14.0.0"
-  }
+  },
+  "devDependencies": {
+    "prettier": "^2.0.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mirshko/matte.git"
+  },
+  "bugs": {
+    "url": "https://github.com/mirshko/matte/issues"
+  },
+  "homepage": "https://matte.pics"
 }

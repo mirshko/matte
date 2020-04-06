@@ -29,11 +29,14 @@ export default async (req, res) => {
         }
       });
 
-      const { secure_url, public_id } = await uploader.upload(await base64EncodedImage, {
-        resource_type: "image",
-        public_id: "uploads/" + nanoid(),
-        tags: "matte.pics"
-      });
+      const { secure_url, public_id } = await uploader.upload(
+        await base64EncodedImage,
+        {
+          resource_type: "image",
+          public_id: "uploads/" + nanoid(),
+          tags: "matte.pics",
+        }
+      );
 
       res.status(200).json({
         success: true,
