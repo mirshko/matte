@@ -3,12 +3,18 @@ import { Button } from "../components/buttons";
 import { FileInput } from "../components/inputs";
 import Layout from "../components/layout";
 import { CLOUDINARY_BASE } from "../lib/constants";
+import { useDrop } from "react-use";
 
 const Page = () => {
   const [file, setFile] = useState(undefined);
   const [imagePreview, setImagePreview] = useState(undefined);
   const [loading, setLoading] = useState(false);
   const downloadRef = useRef(null);
+  const state = useDrop({
+    onFiles: (files) => {
+      if (files[0].type.includes("image")) setFile(files[0]);
+    },
+  });
 
   const handleFileChange = (e) => setFile(e.target.files[0]);
 
@@ -45,7 +51,7 @@ const Page = () => {
       {Boolean(file) && (
         <Fragment>
           <div className="top-right">
-            <Button onClick={clearFile}>New</Button>
+            <Button onClick={clearFile}>New Image</Button>
           </div>
 
           <div className="bottom-centered">
@@ -64,7 +70,7 @@ const Page = () => {
         {/* Preview Mated Image */}
         {Boolean(imagePreview) && (
           <Fragment>
-            <img className="img" src={imagePreview} alt="" />
+            <img src={imagePreview} alt="" />
             <a href={imagePreview} download hidden ref={downloadRef}>
               Download
             </a>
@@ -73,18 +79,25 @@ const Page = () => {
 
         {/* Preview Uploaded Image */}
         {Boolean(file) && !Boolean(imagePreview) && (
-          <img className="img" src={URL.createObjectURL(file)} alt="" />
+          <img src={URL.createObjectURL(file)} alt="" />
         )}
 
         {/* Upload File */}
-        {!Boolean(file) && <FileInput onChange={handleFileChange} />}
+        {!Boolean(file) && (
+          <FileInput
+            label={state.over ? "Drop Me!" : "Choose Image"}
+            onChange={handleFileChange}
+          />
+        )}
       </div>
 
       <style jsx global>{`
-        .img {
-          width: 320px;
-          height: 320px;
+        img {
+          width: auto;
+          height: 100vmin;
+          max-width: 100vmin;
           object-fit: contain;
+          vertical-align: middle;
         }
 
         .top-right {
