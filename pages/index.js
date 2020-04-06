@@ -1,9 +1,9 @@
 import { Fragment, useRef, useState } from "react";
+import { useDrop } from "react-use";
 import { Button } from "../components/buttons";
 import { FileInput } from "../components/inputs";
 import Layout from "../components/layout";
-import { CLOUDINARY_BASE } from "../lib/constants";
-import { useDrop } from "react-use";
+import { ALLOWED_IMAGE_FORMATS, CLOUDINARY_BASE } from "../lib/constants";
 
 const Page = () => {
   const [file, setFile] = useState(undefined);
@@ -11,12 +11,24 @@ const Page = () => {
   const [loading, setLoading] = useState(false);
   const downloadRef = useRef(null);
   const state = useDrop({
-    onFiles: (files) => {
-      if (files[0].type.includes("image")) setFile(files[0]);
-    },
+    onFiles: (files) => handleSetFile(files[0]),
   });
 
-  const handleFileChange = (e) => setFile(e.target.files[0]);
+  const handleSetFile = (file) => {
+    if (!ALLOWED_IMAGE_FORMATS.includes(file.type)) {
+      window.alert("Not An Image\nThis file type is not allowed.");
+      return;
+    }
+
+    if (file.size > 1e7) {
+      window.alert("Picture Too Large\nYour file is greater than 10 MB.");
+      return;
+    }
+
+    setFile(file);
+  };
+
+  const handleOnChange = (e) => handleSetFile(e.target.files[0]);
 
   const saveImage = () => downloadRef.current.click();
 
@@ -90,7 +102,7 @@ const Page = () => {
         )}
 
         {/* Upload File */}
-        {!Boolean(file) && <FileInput onChange={handleFileChange} />}
+        {!Boolean(file) && <FileInput onChange={handleOnChange} />}
       </div>
 
       <style jsx global>{`
