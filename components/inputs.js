@@ -37,7 +37,7 @@ export const FileInput = ({ onChange, ...rest }) => (
         text-align: center;
         font-weight: 600;
         border-radius: 99999px;
-        width: 220px;
+        white-space: nowrap;
         background-color: white;
         border: none;
         appearance: none;
