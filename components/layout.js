@@ -2,7 +2,7 @@ import Div100vh from "react-div-100vh";
 import Head from "next/head";
 
 const Layout = ({ children }) => (
-  <Div100vh>
+  <Div100vh as="main" style={{display: "grid", placeItems: "center", height: '100rvh' }}>
     <Head>
       <title>Matte</title>
       <meta
