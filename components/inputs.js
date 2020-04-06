@@ -1,5 +1,5 @@
 export const FileInput = ({ onChange, ...rest }) => (
-  <>
+  <div>
     <input
       id="file"
       type="file"
@@ -37,6 +37,7 @@ export const FileInput = ({ onChange, ...rest }) => (
         text-align: center;
         font-weight: 600;
         border-radius: 99999px;
+        min-width: 220px;
         background-color: white;
         border: none;
         appearance: none;
@@ -47,5 +48,5 @@ export const FileInput = ({ onChange, ...rest }) => (
         box-shadow: 0 0 0 3px rgba(131, 192, 253, 0.5);
       }
     `}</style>
-  </>
+  </div>
 );

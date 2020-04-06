@@ -1,11 +1,7 @@
-import Div100vh from "react-div-100vh";
 import Head from "next/head";
 
 const Layout = ({ children }) => (
-  <Div100vh
-    as="main"
-    style={{ display: "grid", placeItems: "center", height: "100rvh" }}
-  >
+  <main>
     <Head>
       <title>Matte.pics</title>
       <meta
@@ -35,7 +31,7 @@ const Layout = ({ children }) => (
       <link rel="preload" href="/favicon.png" as="image" />
     </Head>
     {children}
-  </Div100vh>
+  </main>
 );
 
 export default Layout;

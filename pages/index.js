@@ -48,7 +48,7 @@ const Page = () => {
 
   return (
     <Layout>
-      <div className="top-left">
+      <div className="top-left z-max">
         <img
           className="icon"
           src="/favicon.png"
@@ -59,11 +59,11 @@ const Page = () => {
 
       {Boolean(file) && (
         <Fragment>
-          <div className="top-right">
-            <Button onClick={clearFile}>New Matte</Button>
+          <div className="top-right z-max">
+            <Button onClick={clearFile}>New</Button>
           </div>
 
-          <div className="bottom-centered">
+          <div className="bottom-centered z-max">
             {!Boolean(imagePreview) ? (
               <Button onClick={matFile}>
                 {loading ? "Matting..." : "Matte"}
@@ -75,7 +75,7 @@ const Page = () => {
         </Fragment>
       )}
 
-      <div>
+      <div className="middle-centered">
         {/* Preview Mated Image */}
         {Boolean(imagePreview) && (
           <Fragment>
@@ -160,6 +160,17 @@ const Page = () => {
           bottom: 32px;
           transform: translateX(-50%);
           left: 50%;
+        }
+
+        .middle-centered {
+          position: fixed;
+          top: 50%;
+          transform: translate3d(-50%, -50%, 0);
+          left: 50%;
+        }
+
+        .z-max {
+          z-index: 99999;
         }
       `}</style>
     </Layout>
