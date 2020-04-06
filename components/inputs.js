@@ -9,7 +9,7 @@ export const FileInput = ({ onChange, ...rest }) => (
     />
     <label htmlFor="file">
       <span>
-        Drag & Drop or <u>Browse</u>
+        Drag & Drop or Browse
       </span>
     </label>
     <style jsx>{`
