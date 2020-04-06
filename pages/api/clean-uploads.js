@@ -12,9 +12,9 @@ export default async (req, res) => {
 
     const stale_resources = resources
       .filter(({ created_at }) => {
-        const twoMinutesAgo = dayjs.utc().subtract(2, "minute");
+        const fiveMinutesAgo = dayjs.utc().subtract(5, "minute");
 
-        return dayjs(created_at).isBefore(twoMinutesAgo);
+        return dayjs(created_at).isBefore(fiveMinutesAgo);
       })
       .map(({ public_id }) => public_id);
 
