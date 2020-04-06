@@ -94,13 +94,11 @@ const Page = () => {
       </div>
 
       <style jsx global>{`
-        body {
-          transition: background-color 200ms;
-          background-color: ${state?.over ? "#4E2452" : "#301934"};
+        :root {
+          --primary: #301934;
+          --primary-light: #4e2452;
         }
-      `}</style>
 
-      <style jsx global>{`
         html {
           box-sizing: border-box;
         }
@@ -121,6 +119,7 @@ const Page = () => {
           -webkit-font-smoothing: antialiased;
           -moz-osx-font-smoothing: grayscale;
           color: white;
+          background-color: var(--primary);
         }
 
         :focus {
@@ -130,11 +129,17 @@ const Page = () => {
         }
 
         .img {
-          width: auto;
-          height: 90vmin;
-          max-width: 90vmin;
+          width: 320px;
+          height: 320px;
           object-fit: contain;
           vertical-align: middle;
+        }
+
+        @media (min-width: 52em) {
+          .img {
+            width: 640px;
+            height: 640px;
+          }
         }
 
         .icon {
