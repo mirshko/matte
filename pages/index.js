@@ -1,8 +1,8 @@
 import { Fragment, useRef, useState } from "react";
 import { useDrop } from "react-use";
 import Alert from "../components/Alert";
-import { Button } from "../components/Button";
-import { FileInput } from "../components/FileInput";
+import Button from "../components/Button";
+import FileInput from "../components/FileInput";
 import { ALLOWED_IMAGE_FORMATS, CLOUDINARY_BASE } from "../lib/constants";
 
 const Page = () => {
