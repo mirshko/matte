@@ -1,3 +1,4 @@
+import { trackGoal } from "fathom-client";
 import { Fragment, useRef, useState } from "react";
 import { useDrop } from "react-use";
 import Alert from "../components/Alert";
@@ -58,6 +59,7 @@ const Page = () => {
 
       const { public_id } = await post.json();
 
+      trackGoal("Y1VU2I3B", 0);
       setImagePreview(CLOUDINARY_BASE + public_id);
       setLoading(false);
     } catch (err) {
