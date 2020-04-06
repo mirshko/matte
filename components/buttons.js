@@ -1,4 +1,4 @@
-export const Button = props => {
+export const Button = (props) => {
   return (
     <>
       <button {...props} />
@@ -18,8 +18,6 @@ export const Button = props => {
           border: none;
           appearance: none;
           background: white;
-          box-shadow: 0px 10px 16px rgba(153, 135, 156, 0.2),
-            0px 4px 6px rgba(153, 135, 156, 0.12);
         }
 
         button:focus {

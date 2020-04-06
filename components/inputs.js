@@ -1,6 +1,12 @@
-const FileInput = ({ label = "Upload", ...rest }) => (
+export const FileInput = ({ label = "Choose File", onChange, ...rest }) => (
   <>
-    <input id="file" type="file" accept="image/*" {...rest} />
+    <input
+      id="file"
+      type="file"
+      accept="image/*"
+      onChange={onChange}
+      {...rest}
+    />
     <label htmlFor="file">{label}</label>
     <style jsx>{`
       input {
@@ -27,8 +33,6 @@ const FileInput = ({ label = "Upload", ...rest }) => (
         border: none;
         appearance: none;
         background: white;
-        box-shadow: 0px 10px 16px rgba(153, 135, 156, 0.2),
-          0px 4px 6px rgba(153, 135, 156, 0.12);
       }
 
       input:focus + label {
@@ -56,5 +60,3 @@ const FileInput = ({ label = "Upload", ...rest }) => (
     `}</style>
   </>
 );
-
-export { FileInput };
