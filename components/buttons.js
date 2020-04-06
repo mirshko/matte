@@ -20,7 +20,8 @@ export const Button = (props) => {
           appearance: none;
         }
 
-        button:focus {
+        button:focus,
+        button:active {
           outline: none;
           box-shadow: 0 0 0 3px rgba(131, 192, 253, 0.5);
         }

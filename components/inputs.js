@@ -8,9 +8,7 @@ export const FileInput = ({ onChange, ...rest }) => (
       {...rest}
     />
     <label htmlFor="file">
-      <span>
-        Drag & Drop or Browse
-      </span>
+      <span>Drag & Drop or Browse</span>
     </label>
     <style jsx>{`
       input {
@@ -43,7 +41,8 @@ export const FileInput = ({ onChange, ...rest }) => (
         appearance: none;
       }
 
-      input:focus + label {
+      input:focus + label,
+      input:active + label {
         outline: none;
         box-shadow: 0 0 0 3px rgba(131, 192, 253, 0.5);
       }
