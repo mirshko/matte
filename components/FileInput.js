@@ -1,4 +1,4 @@
-export const FileInput = ({ onChange, ...rest }) => (
+const FileInput = ({ onChange, ...rest }) => (
   <div>
     <input
       id="file"
@@ -49,3 +49,5 @@ export const FileInput = ({ onChange, ...rest }) => (
     `}</style>
   </div>
 );
+
+export default FileInput

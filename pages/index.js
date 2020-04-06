@@ -1,9 +1,8 @@
 import { Fragment, useRef, useState } from "react";
 import { useDrop } from "react-use";
 import Alert from "../components/Alert";
-import { Button } from "../components/buttons";
-import { FileInput } from "../components/inputs";
-import Layout from "../components/layout";
+import { Button } from "../components/Button";
+import { FileInput } from "../components/FileInput";
 import { ALLOWED_IMAGE_FORMATS, CLOUDINARY_BASE } from "../lib/constants";
 
 const Page = () => {
@@ -69,7 +68,7 @@ const Page = () => {
   };
 
   return (
-    <Layout>
+    <div>
       {showAllowedDialog && (
         <Alert
           label="Not An Image"
@@ -210,7 +209,7 @@ const Page = () => {
           z-index: 99999;
         }
       `}</style>
-    </Layout>
+    </div>
   );
 };
 
