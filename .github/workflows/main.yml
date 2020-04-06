@@ -8,4 +8,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Call function
-      run: curl --verbose https://matte.pics/api/clean-uploads
+      run: curl https://matte.pics/api/clean-uploads
