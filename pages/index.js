@@ -1,7 +1,6 @@
 import { trackGoal } from "fathom-client";
 import { Fragment, useRef, useState } from "react";
 import { useDrop } from "react-use";
-import Alert from "../components/Alert";
 import Button from "../components/Button";
 import FileInput from "../components/FileInput";
 
@@ -12,15 +11,13 @@ const BACKGROUND_TYPES = {
 
 const Page = () => {
   const [file, setFile] = useState(undefined);
+  
   const [imagePreview, setImagePreview] = useState(undefined);
 
   const [loading, setLoading] = useState(false);
 
-  const [showAllowedDialog, setShowAllowedDialog] = useState(false);
-  const [showSizeDialog, setShowSizeDialog] = useState(false);
-
   const [background, setBackground] = useState(BACKGROUND_TYPES.WHITE);
-  
+
   const download = useRef(null);
 
   const state = useDrop({
@@ -30,20 +27,14 @@ const Page = () => {
     },
   });
 
-  const openAllowedDialog = () => setShowAllowedDialog(true);
-  const openSizeDialog = () => setShowSizeDialog(true);
-
-  const closeAllowedDialog = () => setShowAllowedDialog(false);
-  const closeSizeDialog = () => setShowSizeDialog(false);
-
   const handleSetFile = (file) => {
     if (!file.type.includes("image")) {
-      openAllowedDialog();
+      window.alert("Not An Image\nThis image type is not allowed.");
       return;
     }
 
     if (file.size > 1e7) {
-      openSizeDialog();
+      window.alert("Picture Too Large\nThis image is greater than 10 MB.");
       return;
     }
 
@@ -63,16 +54,16 @@ const Page = () => {
     setLoading(true);
 
     try {
-      const post = await fetch("/api/upload?background=" + background, {
+      const res = await fetch("/api/upload?background=" + background, {
         method: "POST",
         headers: { "Content-Type": file.type },
         body: file,
       });
 
-      const buffer = await post.blob();
+      const blob = await res.blob();
 
-      // trackGoal("Y1VU2I3B", 0);
-      setImagePreview(URL.createObjectURL(buffer));
+      trackGoal("Y1VU2I3B", 0);
+      setImagePreview(URL.createObjectURL(blob));
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -83,22 +74,6 @@ const Page = () => {
 
   return (
     <div>
-      {showAllowedDialog && (
-        <Alert
-          label="Not An Image"
-          description="This file type is not allowed."
-          close={closeAllowedDialog}
-        />
-      )}
-
-      {showSizeDialog && (
-        <Alert
-          label="Picture Too Large"
-          description="Your file is greater than 10 MB."
-          close={closeSizeDialog}
-        />
-      )}
-
       <div className="top-left z-max">
         <img
           className="icon"
