@@ -11,8 +11,8 @@ const BACKGROUND_TYPES = {
 
 const Page = () => {
   const [file, setFile] = useState(undefined);
-  
-  const [imagePreview, setImagePreview] = useState(undefined);
+
+  const [image, setImage] = useState(undefined);
 
   const [loading, setLoading] = useState(false);
 
@@ -29,7 +29,7 @@ const Page = () => {
 
   const handleSetFile = (file) => {
     if (!file.type.includes("image")) {
-      window.alert("Not An Image\nThis image type is not allowed.");
+      window.alert("Not An Image\nThis file type is not allowed.");
       return;
     }
 
@@ -46,7 +46,7 @@ const Page = () => {
   const saveImage = () => download.current.click();
 
   const clearFile = () => {
-    setImagePreview(undefined);
+    setImage(undefined);
     setFile(undefined);
   };
 
@@ -63,7 +63,7 @@ const Page = () => {
       const blob = await res.blob();
 
       trackGoal("Y1VU2I3B", 0);
-      setImagePreview(URL.createObjectURL(blob));
+      setImage(URL.createObjectURL(blob));
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -90,7 +90,7 @@ const Page = () => {
           </div>
 
           <div className="bottom-centered z-max">
-            {!Boolean(imagePreview) ? (
+            {!Boolean(image) ? (
               <Button onClick={matFile}>
                 {loading ? "Matting..." : "Matte"}
               </Button>
@@ -103,15 +103,15 @@ const Page = () => {
 
       <div className="middle-centered">
         {/* Preview Mated Image */}
-        {Boolean(imagePreview) && (
+        {Boolean(image) && (
           <Fragment>
-            <img className="img" src={imagePreview} alt={file.name} />
-            <a ref={download} href={imagePreview} hidden download={file.name} />
+            <img className="img" src={image} alt={file.name} />
+            <a ref={download} href={image} hidden download={file.name} />
           </Fragment>
         )}
 
         {/* Preview Uploaded Image */}
-        {Boolean(file) && !Boolean(imagePreview) && (
+        {Boolean(file) && !Boolean(image) && (
           <img
             className="img"
             src={URL.createObjectURL(file)}
