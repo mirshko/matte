@@ -50,4 +50,4 @@ const FileInput = ({ onChange, ...rest }) => (
   </div>
 );
 
-export default FileInput
+export default FileInput;

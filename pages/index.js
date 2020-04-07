@@ -63,6 +63,7 @@ const Page = () => {
       const blob = await res.blob();
 
       trackGoal("Y1VU2I3B", 0);
+
       setImage(URL.createObjectURL(blob));
       setLoading(false);
     } catch (err) {
@@ -102,7 +103,6 @@ const Page = () => {
       )}
 
       <div className="middle-centered">
-        {/* Preview Mated Image */}
         {Boolean(image) && (
           <Fragment>
             <img className="img" src={image} alt={file.name} />
@@ -110,7 +110,6 @@ const Page = () => {
           </Fragment>
         )}
 
-        {/* Preview Uploaded Image */}
         {Boolean(file) && !Boolean(image) && (
           <img
             className="img"
@@ -119,7 +118,6 @@ const Page = () => {
           />
         )}
 
-        {/* Upload File */}
         {!Boolean(file) && <FileInput onChange={handleOnChange} />}
       </div>
 
