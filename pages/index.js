@@ -4,7 +4,7 @@ import { useDrop } from "react-use";
 import Button from "../components/Button";
 import FileInput from "../components/FileInput";
 
-const BACKGROUND_TYPES = {
+const COLORS = {
   WHITE: "white",
   BLACK: "black",
 };
@@ -16,7 +16,7 @@ const Page = () => {
 
   const [loading, setLoading] = useState(false);
 
-  const [background, setBackground] = useState(BACKGROUND_TYPES.WHITE);
+  const [color, setColor] = useState(COLORS.WHITE);
 
   const download = useRef(null);
 
@@ -54,7 +54,7 @@ const Page = () => {
     setLoading(true);
 
     try {
-      const res = await fetch("/api/upload?background=" + background, {
+      const res = await fetch("/api/mat?color=" + color, {
         method: "POST",
         headers: { "Content-Type": file.type },
         body: file,

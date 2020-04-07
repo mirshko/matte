@@ -7,7 +7,7 @@ const BACKGROUNDS = {
 
 export default async (req, res) => {
   if (req.method === "POST") {
-    const { background } = req.query;
+    const { color } = req.query;
 
     try {
       const upload = await new Promise(async (resolve, reject) => {
@@ -36,7 +36,7 @@ export default async (req, res) => {
           width: dimensions,
           height: dimensions,
           fit: "contain",
-          background: BACKGROUNDS[background],
+          background: BACKGROUNDS[color],
         })
         .withMetadata()
         .toBuffer();
