@@ -4,18 +4,30 @@ import { useDrop } from "react-use";
 import Alert from "../components/Alert";
 import Button from "../components/Button";
 import FileInput from "../components/FileInput";
-import { ALLOWED_IMAGE_FORMATS, CLOUDINARY_BASE } from "../lib/constants";
+
+const BACKGROUND_TYPES = {
+  WHITE: "white",
+  BLACK: "black",
+};
 
 const Page = () => {
   const [file, setFile] = useState(undefined);
   const [imagePreview, setImagePreview] = useState(undefined);
+
   const [loading, setLoading] = useState(false);
+
   const [showAllowedDialog, setShowAllowedDialog] = useState(false);
   const [showSizeDialog, setShowSizeDialog] = useState(false);
 
-  const downloadRef = useRef(null);
+  const [background, setBackground] = useState(BACKGROUND_TYPES.WHITE);
+  
+  const download = useRef(null);
+
   const state = useDrop({
-    onFiles: (files) => handleSetFile(files[0]),
+    onFiles: (files) => {
+      clearFile();
+      handleSetFile(files[0]);
+    },
   });
 
   const openAllowedDialog = () => setShowAllowedDialog(true);
@@ -25,7 +37,7 @@ const Page = () => {
   const closeSizeDialog = () => setShowSizeDialog(false);
 
   const handleSetFile = (file) => {
-    if (!ALLOWED_IMAGE_FORMATS.includes(file.type)) {
+    if (!file.type.includes("image")) {
       openAllowedDialog();
       return;
     }
@@ -40,7 +52,7 @@ const Page = () => {
 
   const handleOnChange = (e) => handleSetFile(e.target.files[0]);
 
-  const saveImage = () => downloadRef.current.click();
+  const saveImage = () => download.current.click();
 
   const clearFile = () => {
     setImagePreview(undefined);
@@ -51,16 +63,16 @@ const Page = () => {
     setLoading(true);
 
     try {
-      const post = await fetch("/api/upload", {
+      const post = await fetch("/api/upload?background=" + background, {
         method: "POST",
         headers: { "Content-Type": file.type },
         body: file,
       });
 
-      const { public_id } = await post.json();
+      const buffer = await post.blob();
 
-      trackGoal("Y1VU2I3B", 0);
-      setImagePreview(CLOUDINARY_BASE + public_id);
+      // trackGoal("Y1VU2I3B", 0);
+      setImagePreview(URL.createObjectURL(buffer));
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -118,14 +130,18 @@ const Page = () => {
         {/* Preview Mated Image */}
         {Boolean(imagePreview) && (
           <Fragment>
-            <img className="img" src={imagePreview} alt="" />
-            <a href={imagePreview} download hidden ref={downloadRef} />
+            <img className="img" src={imagePreview} alt={file.name} />
+            <a ref={download} href={imagePreview} hidden download={file.name} />
           </Fragment>
         )}
 
         {/* Preview Uploaded Image */}
         {Boolean(file) && !Boolean(imagePreview) && (
-          <img className="img" src={URL.createObjectURL(file)} alt="" />
+          <img
+            className="img"
+            src={URL.createObjectURL(file)}
+            alt={file.name}
+          />
         )}
 
         {/* Upload File */}

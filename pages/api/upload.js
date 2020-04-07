@@ -1,14 +1,16 @@
-import { v2 as cloudinary } from "cloudinary";
-import { nanoid } from "nanoid";
+import sharp from "sharp";
 
-const uploader = cloudinary.uploader;
+const BACKGROUNDS = {
+  white: { r: 255, g: 255, b: 255, alpha: 1 },
+  black: { r: 0, g: 0, b: 0, alpha: 1 },
+};
 
 export default async (req, res) => {
   if (req.method === "POST") {
-    const contentType = req.headers["content-type"];
+    const { background } = req.query;
 
     try {
-      const base64EncodedImage = await new Promise(async (resolve, reject) => {
+      const upload = await new Promise(async (resolve, reject) => {
         let file = Buffer.from("");
 
         try {
@@ -17,33 +19,29 @@ export default async (req, res) => {
             (chunk) => (file = Buffer.concat([file, chunk]))
           );
 
-          await req.on("end", () => {
-            const base64 = file.toString("base64");
-
-            const base64Image = `data:${contentType};base64,${base64}`;
-
-            resolve(base64Image);
-          });
+          await req.on("end", () => resolve(file));
         } catch (err) {
           reject(err);
         }
       });
 
-      const { secure_url, public_id } = await uploader.upload(
-        await base64EncodedImage,
-        {
-          resource_type: "image",
-          public_id: "uploads/" + nanoid(),
-          tags: "matte.pics",
-        }
-      );
+      const original = sharp(upload);
 
-      res.status(200).json({
-        success: true,
-        message: "Image Uploaded",
-        secure_url,
-        public_id,
-      });
+      const metadata = await original.metadata();
+
+      const dimensions = Math.max(metadata.width, metadata.height);
+
+      const matted = await original
+        .resize({
+          width: dimensions,
+          height: dimensions,
+          fit: "contain",
+          background: BACKGROUNDS[background],
+        })
+        .withMetadata()
+        .toBuffer();
+
+      res.status(200).send(matted);
     } catch (err) {
       console.error(err);
       res.status(400).json({ success: false, error: err.message });
