@@ -15,14 +15,13 @@
   "license": "ISC",
   "dependencies": {
     "@reach/alert-dialog": "^0.10.0",
-    "cloudinary": "^1.21.0",
     "dayjs": "^1.8.23",
     "fathom-client": "^2.0.3",
-    "nanoid": "^3.0.2",
     "next": "^9.3.4",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-use": "^14.0.0"
+    "react-use": "^14.0.0",
+    "sharp": "^0.25.2"
   },
   "devDependencies": {
     "prettier": "^2.0.4"

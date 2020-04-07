@@ -1,37 +1,40 @@
 import { trackGoal } from "fathom-client";
 import { Fragment, useRef, useState } from "react";
 import { useDrop } from "react-use";
-import Alert from "../components/Alert";
 import Button from "../components/Button";
 import FileInput from "../components/FileInput";
-import { ALLOWED_IMAGE_FORMATS, CLOUDINARY_BASE } from "../lib/constants";
+
+const COLORS = {
+  WHITE: "white",
+  BLACK: "black",
+};
 
 const Page = () => {
   const [file, setFile] = useState(undefined);
-  const [imagePreview, setImagePreview] = useState(undefined);
-  const [loading, setLoading] = useState(false);
-  const [showAllowedDialog, setShowAllowedDialog] = useState(false);
-  const [showSizeDialog, setShowSizeDialog] = useState(false);
 
-  const downloadRef = useRef(null);
+  const [image, setImage] = useState(undefined);
+
+  const [loading, setLoading] = useState(false);
+
+  const [color, setColor] = useState(COLORS.WHITE);
+
+  const download = useRef(null);
+
   const state = useDrop({
-    onFiles: (files) => handleSetFile(files[0]),
+    onFiles: (files) => {
+      clearFile();
+      handleSetFile(files[0]);
+    },
   });
 
-  const openAllowedDialog = () => setShowAllowedDialog(true);
-  const openSizeDialog = () => setShowSizeDialog(true);
-
-  const closeAllowedDialog = () => setShowAllowedDialog(false);
-  const closeSizeDialog = () => setShowSizeDialog(false);
-
   const handleSetFile = (file) => {
-    if (!ALLOWED_IMAGE_FORMATS.includes(file.type)) {
-      openAllowedDialog();
+    if (!file.type.includes("image")) {
+      window.alert("Not An Image\nThis file type is not allowed.");
       return;
     }
 
     if (file.size > 1e7) {
-      openSizeDialog();
+      window.alert("Picture Too Large\nThis image is greater than 10 MB.");
       return;
     }
 
@@ -40,10 +43,10 @@ const Page = () => {
 
   const handleOnChange = (e) => handleSetFile(e.target.files[0]);
 
-  const saveImage = () => downloadRef.current.click();
+  const saveImage = () => download.current.click();
 
   const clearFile = () => {
-    setImagePreview(undefined);
+    setImage(undefined);
     setFile(undefined);
   };
 
@@ -51,16 +54,16 @@ const Page = () => {
     setLoading(true);
 
     try {
-      const post = await fetch("/api/upload", {
+      const res = await fetch("/api/mat?color=" + color, {
         method: "POST",
         headers: { "Content-Type": file.type },
         body: file,
       });
 
-      const { public_id } = await post.json();
+      const blob = await res.blob();
 
       trackGoal("Y1VU2I3B", 0);
-      setImagePreview(CLOUDINARY_BASE + public_id);
+      setImage(URL.createObjectURL(blob));
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -71,22 +74,6 @@ const Page = () => {
 
   return (
     <div>
-      {showAllowedDialog && (
-        <Alert
-          label="Not An Image"
-          description="This file type is not allowed."
-          close={closeAllowedDialog}
-        />
-      )}
-
-      {showSizeDialog && (
-        <Alert
-          label="Picture Too Large"
-          description="Your file is greater than 10 MB."
-          close={closeSizeDialog}
-        />
-      )}
-
       <div className="top-left z-max">
         <img
           className="icon"
@@ -103,7 +90,7 @@ const Page = () => {
           </div>
 
           <div className="bottom-centered z-max">
-            {!Boolean(imagePreview) ? (
+            {!Boolean(image) ? (
               <Button onClick={matFile}>
                 {loading ? "Matting..." : "Matte"}
               </Button>
@@ -116,16 +103,20 @@ const Page = () => {
 
       <div className="middle-centered">
         {/* Preview Mated Image */}
-        {Boolean(imagePreview) && (
+        {Boolean(image) && (
           <Fragment>
-            <img className="img" src={imagePreview} alt="" />
-            <a href={imagePreview} download hidden ref={downloadRef} />
+            <img className="img" src={image} alt={file.name} />
+            <a ref={download} href={image} hidden download={file.name} />
           </Fragment>
         )}
 
         {/* Preview Uploaded Image */}
-        {Boolean(file) && !Boolean(imagePreview) && (
-          <img className="img" src={URL.createObjectURL(file)} alt="" />
+        {Boolean(file) && !Boolean(image) && (
+          <img
+            className="img"
+            src={URL.createObjectURL(file)}
+            alt={file.name}
+          />
         )}
 
         {/* Upload File */}

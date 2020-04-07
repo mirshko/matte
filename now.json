@@ -1,8 +1,5 @@
 {
   "version": 2,
-  "env": {
-    "CLOUDINARY_URL": "@cloudinary_url"
-  },
   "github": {
     "silent": true
   }
