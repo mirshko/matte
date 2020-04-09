@@ -76,7 +76,7 @@ const Page = () => {
 
       trackGoal("Y1VU2I3B", 0);
 
-      setImage(URL.createObjectURL(blob));
+      setImage(blob);
       setLoading(false);
     } catch (err) {
       setLoading(false);
@@ -119,7 +119,11 @@ const Page = () => {
       <div className="middle-centered">
         {Boolean(image) && (
           <Fragment>
-            <img className="img" src={image} alt={file.name} />
+            <img
+              className="img"
+              src={URL.createObjectURL(image)}
+              alt={file.name}
+            />
             <a ref={download} href={image} hidden download={file.name} />
           </Fragment>
         )}
