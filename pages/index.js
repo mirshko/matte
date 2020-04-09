@@ -44,7 +44,7 @@ const Page = () => {
   const handleOnChange = (e) => handleSetFile(e.target.files[0]);
 
   const saveImage = () => {
-    if (navigator.canShare) {
+    if (Boolean(navigator.share)) {
       navigator.share({
         title: "matte.pics",
         text: file.name,
@@ -109,7 +109,7 @@ const Page = () => {
               </Button>
             ) : (
               <Button onClick={saveImage}>
-                {navigator.canShare ? "Share" : "Save"}
+                {Boolean(navigator.share) ? "Share" : "Save"}
               </Button>
             )}
           </div>
