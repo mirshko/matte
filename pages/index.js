@@ -43,19 +43,7 @@ const Page = () => {
 
   const handleOnChange = (e) => handleSetFile(e.target.files[0]);
 
-  const saveImage = () => {
-    if (Boolean(navigator.share)) {
-      navigator.share({
-        title: "matte.pics",
-        text: file.name,
-        files: [image],
-      });
-
-      return;
-    }
-
-    download.current.click();
-  };
+  const saveImage = () => download.current.click();
 
   const clearFile = () => {
     setImage(undefined);
@@ -108,9 +96,7 @@ const Page = () => {
                 {loading ? "Matting..." : "Matte"}
               </Button>
             ) : (
-              <Button onClick={saveImage}>
-                {Boolean(navigator.share) ? "Share" : "Save"}
-              </Button>
+              <Button onClick={saveImage}>Save</Button>
             )}
           </div>
         </Fragment>
