@@ -17,7 +17,7 @@
     "@reach/alert-dialog": "^0.10.0",
     "dayjs": "^1.8.23",
     "fathom-client": "^2.0.3",
-    "next": "^9.3.4",
+    "next": "^9.3.6",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-use": "^14.0.0",
