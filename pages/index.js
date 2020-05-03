@@ -107,18 +107,23 @@ const Page = () => {
           <Fragment>
             <img
               className="img"
-              src={URL.createObjectURL(image)}
               alt={file.name}
+              src={URL.createObjectURL(image)}
             />
-            <a ref={download} href={image} hidden download={file.name} />
+            <a
+              hidden
+              ref={download}
+              download={file.name}
+              href={URL.createObjectURL(image)}
+            />
           </Fragment>
         )}
 
         {Boolean(file) && !Boolean(image) && (
           <img
             className="img"
-            src={URL.createObjectURL(file)}
             alt={file.name}
+            src={URL.createObjectURL(file)}
           />
         )}
 
