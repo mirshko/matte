@@ -2,7 +2,7 @@ const Brand = ({ color }) => {
   const fill = `rgba(${color.r}, ${color.g}, ${color.b}, ${color.alpha})`;
 
   return (
-    <div className="wrapper">
+    <a href="https://reiner.design" target="_blank" className="wrapper">
       <svg width={45} height={45} viewBox="0 0 45 45" fill="none">
         <title>Matte.pics</title>
         <rect width={45} height={45} rx={11.25} fill={fill} />
@@ -16,6 +16,13 @@ const Brand = ({ color }) => {
         .wrapper {
           display: flex;
           align-items: center;
+          color: #fff;
+          text-decoration: none;
+          outline: none;
+        }
+        .wrapper:focus svg {
+          box-shadow: 0 0 0 3px rgba(131, 192, 253, 0.5);
+          border-radius: 11.25px;
         }
         .version {
           font-size: 1.25rem;
@@ -24,7 +31,7 @@ const Brand = ({ color }) => {
           margin-left: 0.75rem;
         }
       `}</style>
-    </div>
+    </a>
   );
 };
 
