@@ -10,6 +10,9 @@ const Brand = ({ color }) => {
       </svg>
       <span className="version">2.0</span>
       <style jsx>{`
+        rect {
+          transition: fill 250ms ease-in;
+        }
         .wrapper {
           display: flex;
           align-items: center;
