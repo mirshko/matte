@@ -1,5 +1,6 @@
 import Head from "next/head";
 import useFathom from "../hooks/useFathom";
+import "../styles/app.css";
 
 export default function App({ Component, pageProps }) {
   useFathom();
