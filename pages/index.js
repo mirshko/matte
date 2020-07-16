@@ -77,14 +77,14 @@ const Page = () => {
         <Brand color={BACKGROUNDS[color]} />
       </div>
 
-      {Boolean(file) && (
+      {!!file && (
         <div className="top-right z-max">
           <Button onClick={clearFile}>New</Button>
         </div>
       )}
 
       <div className="middle-centered">
-        {Boolean(image) && (
+        {!!image && (
           <Fragment>
             <img
               className="img"
@@ -100,7 +100,7 @@ const Page = () => {
           </Fragment>
         )}
 
-        {Boolean(file) && !Boolean(image) && (
+        {!!file && !image && (
           <img
             className="img"
             alt={file.name}
@@ -108,19 +108,15 @@ const Page = () => {
           />
         )}
 
-        {!Boolean(file) && <FileInput onChange={handleOnChange} />}
+        {!file && <FileInput onChange={handleOnChange} />}
       </div>
 
       <div className="bottom-right z-max button-stack">
-        {Boolean(file) && !Boolean(image) && (
-          <Button onClick={cycleColor}>{color}</Button>
-        )}
-        {Boolean(file) && !Boolean(image) && (
+        {!!file && !image && <Button onClick={cycleColor}>{color}</Button>}
+        {!!file && !image && (
           <Button onClick={matFile}>{loading ? "Matting..." : "Matte"}</Button>
         )}
-        {Boolean(file) && Boolean(image) && (
-          <Button onClick={saveImage}>Save</Button>
-        )}
+        {!!file && !!image && <Button onClick={saveImage}>Save</Button>}
       </div>
     </div>
   );
