@@ -1,9 +1,5 @@
 import sharp from "sharp";
-
-const BACKGROUNDS = {
-  white: { r: 255, g: 255, b: 255, alpha: 1 },
-  black: { r: 0, g: 0, b: 0, alpha: 1 },
-};
+import backgrounds from "../../lib/backgrounds";
 
 export default async (req, res) => {
   if (req.method === "POST") {
@@ -36,7 +32,7 @@ export default async (req, res) => {
           width: dimensions,
           height: dimensions,
           fit: "contain",
-          background: BACKGROUNDS[color],
+          background: backgrounds[color],
         })
         .withMetadata()
         .toBuffer();

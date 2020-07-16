@@ -3,17 +3,18 @@ import { useDrop } from "react-use";
 import Button from "../components/Button";
 import FileInput from "../components/FileInput";
 import { GOALS, trackGoal } from "../lib/fathom";
-
-const COLORS = {
-  WHITE: "white",
-  BLACK: "black",
-};
+import { useStateList } from "react-use";
+import backgrounds from "../lib/backgrounds";
 
 const Page = () => {
   const [file, setFile] = useState(undefined);
   const [image, setImage] = useState(undefined);
   const [loading, setLoading] = useState(false);
-  const [color, setColor] = useState(COLORS.WHITE);
+
+  const { state: color, next, setStateAt } = useStateList(
+    Object.keys(backgrounds)
+  );
+  const cycleColor = () => next();
 
   const download = useRef(null);
 
@@ -45,6 +46,7 @@ const Page = () => {
   const clearFile = () => {
     setImage(undefined);
     setFile(undefined);
+    setStateAt(0);
   };
 
   const matFile = async () => {
@@ -82,21 +84,9 @@ const Page = () => {
       </div>
 
       {Boolean(file) && (
-        <Fragment>
-          <div className="top-right z-max">
-            <Button onClick={clearFile}>New</Button>
-          </div>
-
-          <div className="bottom-centered z-max">
-            {!Boolean(image) ? (
-              <Button onClick={matFile}>
-                {loading ? "Matting..." : "Matte"}
-              </Button>
-            ) : (
-              <Button onClick={saveImage}>Save</Button>
-            )}
-          </div>
-        </Fragment>
+        <div className="top-right z-max">
+          <Button onClick={clearFile}>New</Button>
+        </div>
       )}
 
       <div className="middle-centered">
@@ -126,6 +116,24 @@ const Page = () => {
 
         {!Boolean(file) && <FileInput onChange={handleOnChange} />}
       </div>
+
+      {Boolean(file) && !Boolean(image) && (
+        <div className="bottom-left z-max">
+          <Button onClick={cycleColor}>{color}</Button>
+        </div>
+      )}
+
+      {Boolean(file) && !Boolean(image) && (
+        <div className="bottom-right z-max">
+          <Button onClick={matFile}>{loading ? "Matting..." : "Matte"}</Button>
+        </div>
+      )}
+
+      {Boolean(file) && Boolean(image) && (
+        <div className="bottom-centered z-max">
+          <Button onClick={saveImage}>Save</Button>
+        </div>
+      )}
     </div>
   );
 };
