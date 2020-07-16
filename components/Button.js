@@ -1,3 +1,7 @@
+/**
+ * @name Button
+ * @param {React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>} props
+ */
 const Button = (props) => {
   return (
     <>

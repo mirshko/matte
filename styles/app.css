@@ -1,0 +1,86 @@
+:root {
+  --primary: #301934;
+  --primary-light: #4e2452;
+}
+
+html {
+  box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit;
+}
+
+body {
+  margin: 0;
+  font-family: "SF Pro Text", "SF Pro Icons", "Helvetica Neue", "Helvetica",
+    "Arial", sans-serif;
+  font-size: 17px;
+  line-height: 1.47059;
+  letter-spacing: -0.022em;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: white;
+  background-color: var(--primary);
+}
+
+.img {
+  width: 320px;
+  height: 320px;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+@media (min-width: 52em) {
+  .img {
+    width: 640px;
+    height: 640px;
+  }
+}
+
+.top-left {
+  position: fixed;
+  top: 24px;
+  left: 24px;
+}
+
+.top-right {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+}
+
+.bottom-right {
+  position: fixed;
+  bottom: 32px;
+  right: 24px;
+}
+
+.bottom-centered {
+  position: fixed;
+  bottom: 32px;
+  transform: translateX(-50%);
+  left: 50%;
+}
+
+.middle-centered {
+  position: fixed;
+  top: 50%;
+  transform: translate3d(-50%, -50%, 0);
+  left: 50%;
+}
+
+.button-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.button-stack > *:not(:last-child) {
+  margin-bottom: 1rem;
+}
+
+.z-max {
+  z-index: 99999;
+}

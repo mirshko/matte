@@ -1,17 +1,9 @@
-import * as Fathom from "fathom-client";
 import Head from "next/head";
-import Router from "next/router";
-import { useEffect } from "react";
-import { SITE_ID } from "../lib/constants";
-
-Router.events.on("routeChangeComplete", () => Fathom.trackPageview());
+import useFathom from "../hooks/useFathom";
+import "../styles/app.css";
 
 export default function App({ Component, pageProps }) {
-  useEffect(() => {
-    Fathom.load();
-    Fathom.setSiteId(SITE_ID);
-    Fathom.trackPageview();
-  }, []);
+  useFathom();
 
   return (
     <main>
@@ -41,7 +33,6 @@ export default function App({ Component, pageProps }) {
           sizes="167x167"
           href="/apple-touch-icon@167.png"
         />
-        <link rel="preload" href="/favicon.png" as="image" />
       </Head>
 
       <Component {...pageProps} />
