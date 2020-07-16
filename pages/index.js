@@ -5,6 +5,7 @@ import FileInput from "../components/FileInput";
 import { GOALS, trackGoal } from "../lib/fathom";
 import { useStateList } from "react-use";
 import backgrounds from "../lib/backgrounds";
+import Brand from "../components/Brand";
 
 const Page = () => {
   const [file, setFile] = useState(undefined);
@@ -75,12 +76,7 @@ const Page = () => {
   return (
     <div>
       <div className="top-left z-max">
-        <img
-          className="icon"
-          src="/favicon.png"
-          alt="Matte.pics"
-          title="Matte.pics"
-        />
+        <Brand color={backgrounds[color]} />
       </div>
 
       {Boolean(file) && (
@@ -117,23 +113,19 @@ const Page = () => {
         {!Boolean(file) && <FileInput onChange={handleOnChange} />}
       </div>
 
-      {Boolean(file) && !Boolean(image) && (
-        <div className="bottom-left z-max">
+      <div className="bottom-right z-max button-stack">
+        {Boolean(file) && !Boolean(image) && (
           <Button onClick={cycleColor}>{color}</Button>
-        </div>
-      )}
-
-      {Boolean(file) && !Boolean(image) && (
-        <div className="bottom-right z-max">
-          <Button onClick={matFile}>{loading ? "Matting..." : "Matte"}</Button>
-        </div>
-      )}
-
-      {Boolean(file) && Boolean(image) && (
-        <div className="bottom-centered z-max">
+        )}
+        {Boolean(file) && !Boolean(image) && (
+          <Button onClick={matFile}>
+            {loading ? "Matting..." : "Matte Image"}
+          </Button>
+        )}
+        {Boolean(file) && Boolean(image) && (
           <Button onClick={saveImage}>Save</Button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 };

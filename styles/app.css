@@ -40,12 +40,6 @@ body {
   }
 }
 
-.icon {
-  height: 45px;
-  width: 45px;
-  vertical-align: middle;
-}
-
 .top-left {
   position: fixed;
   top: 24px;
@@ -56,12 +50,6 @@ body {
   position: fixed;
   top: 24px;
   right: 24px;
-}
-
-.bottom-left {
-  position: fixed;
-  bottom: 32px;
-  left: 24px;
 }
 
 .bottom-right {
@@ -82,6 +70,15 @@ body {
   top: 50%;
   transform: translate3d(-50%, -50%, 0);
   left: 50%;
+}
+
+.button-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+.button-stack > *:not(:last-child) {
+  margin-bottom: 1rem;
 }
 
 .z-max {
