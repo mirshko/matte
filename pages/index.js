@@ -1,11 +1,10 @@
 import { Fragment, useRef, useState } from "react";
-import { useDrop } from "react-use";
+import { useDrop, useStateList } from "react-use";
+import Brand from "../components/Brand";
 import Button from "../components/Button";
 import FileInput from "../components/FileInput";
+import BACKGROUNDS from "../lib/backgrounds";
 import { GOALS, trackGoal } from "../lib/fathom";
-import { useStateList } from "react-use";
-import backgrounds from "../lib/backgrounds";
-import Brand from "../components/Brand";
 
 const Page = () => {
   const [file, setFile] = useState(undefined);
@@ -13,13 +12,14 @@ const Page = () => {
   const [loading, setLoading] = useState(false);
 
   const { state: color, next, setStateAt } = useStateList(
-    Object.keys(backgrounds)
+    Object.keys(BACKGROUNDS)
   );
   const cycleColor = () => next();
 
   const download = useRef(null);
+  const saveImage = () => download.current.click();
 
-  const state = useDrop({
+  useDrop({
     onFiles: (files) => {
       clearFile();
       handleSetFile(files[0]);
@@ -41,8 +41,6 @@ const Page = () => {
   };
 
   const handleOnChange = (e) => handleSetFile(e.target.files[0]);
-
-  const saveImage = () => download.current.click();
 
   const clearFile = () => {
     setImage(undefined);
@@ -76,7 +74,7 @@ const Page = () => {
   return (
     <div>
       <div className="top-left z-max">
-        <Brand color={backgrounds[color]} />
+        <Brand color={BACKGROUNDS[color]} />
       </div>
 
       {Boolean(file) && (
@@ -118,9 +116,7 @@ const Page = () => {
           <Button onClick={cycleColor}>{color}</Button>
         )}
         {Boolean(file) && !Boolean(image) && (
-          <Button onClick={matFile}>
-            {loading ? "Matting..." : "Matte Image"}
-          </Button>
+          <Button onClick={matFile}>{loading ? "Matting..." : "Matte"}</Button>
         )}
         {Boolean(file) && Boolean(image) && (
           <Button onClick={saveImage}>Save</Button>
