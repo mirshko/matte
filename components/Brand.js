@@ -23,7 +23,6 @@ const Brand = ({ color }) => {
           align-items: center;
           color: #fff;
           text-decoration: none;
-          outline: none;
         }
         .version {
           font-size: 1.25rem;
