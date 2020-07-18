@@ -82,7 +82,7 @@ const Page = () => {
   };
 
   return (
-    <div>
+    <Fragment>
       <div className="top-left z-max">
         <Brand color={BACKGROUNDS[color]} />
       </div>
@@ -132,7 +132,7 @@ const Page = () => {
           <Button onClick={matFile}>{loading ? "Matting..." : "Matte"}</Button>
         )}
       </div>
-    </div>
+    </Fragment>
   );
 };
 
