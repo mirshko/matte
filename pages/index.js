@@ -49,6 +49,8 @@ const Page = () => {
   };
 
   const matFile = async () => {
+    setImage(undefined);
+
     setLoading(true);
 
     try {
@@ -111,12 +113,16 @@ const Page = () => {
         {!file && <FileInput onChange={handleOnChange} />}
       </div>
 
+      <div className="bottom-centered z-max">
+        {!!file && !!image && <Button onClick={saveImage}>Save</Button>}
+      </div>
+
       <div className="bottom-right z-max button-stack">
-        {!!file && !image && <Button onClick={cycleColor}>{color}</Button>}
-        {!!file && !image && (
+        {!!file && <Button onClick={cycleColor}>{color}</Button>}
+
+        {!!file && (
           <Button onClick={matFile}>{loading ? "Matting..." : "Matte"}</Button>
         )}
-        {!!file && !!image && <Button onClick={saveImage}>Save</Button>}
       </div>
     </div>
   );
