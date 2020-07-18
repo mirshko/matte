@@ -32,7 +32,10 @@ const Page = () => {
       return;
     }
 
-    if (file.size > 4.9e6) {
+    /**
+     * Seems its not truely 5 MB, perhaps due to the encoding of the image being sent to the server being larger than the actual image in the finder.
+     */
+    if (file.size > 4.8e6) {
       window.alert("Picture Too Large\nThis image is greater than 5 MB.");
       return;
     }
@@ -59,6 +62,11 @@ const Page = () => {
         headers: { "Content-Type": file.type },
         body: file,
       });
+
+      if (res.status === 413)
+        throw new Error(
+          "Picture Too Large\nThis image is greater than the 5 MB limit."
+        );
 
       const blob = await res.blob();
 
