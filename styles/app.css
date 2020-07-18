@@ -58,6 +58,12 @@ body {
   right: 24px;
 }
 
+.bottom-left {
+  position: fixed;
+  bottom: 32px;
+  left: 24px;
+}
+
 .bottom-centered {
   position: fixed;
   bottom: 32px;

@@ -23,11 +23,6 @@ const Brand = ({ color }) => {
           align-items: center;
           color: #fff;
           text-decoration: none;
-          outline: none;
-        }
-        .wrapper:focus svg {
-          box-shadow: 0 0 0 3px rgba(131, 192, 253, 0.5);
-          border-radius: 11.25px;
         }
         .version {
           font-size: 1.25rem;

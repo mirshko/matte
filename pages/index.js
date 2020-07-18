@@ -32,7 +32,10 @@ const Page = () => {
       return;
     }
 
-    if (file.size > 4.9e6) {
+    /**
+     * Seems its not truely 5 MB, perhaps due to the encoding of the image being sent to the server being larger than the actual image in the finder.
+     */
+    if (file.size > 4.8e6) {
       window.alert("Picture Too Large\nThis image is greater than 5 MB.");
       return;
     }
@@ -49,6 +52,8 @@ const Page = () => {
   };
 
   const matFile = async () => {
+    setImage(undefined);
+
     setLoading(true);
 
     try {
@@ -57,6 +62,11 @@ const Page = () => {
         headers: { "Content-Type": file.type },
         body: file,
       });
+
+      if (res.status === 413)
+        throw new Error(
+          "Picture Too Large\nThis image is greater than the 5 MB limit."
+        );
 
       const blob = await res.blob();
 
@@ -72,7 +82,7 @@ const Page = () => {
   };
 
   return (
-    <div>
+    <Fragment>
       <div className="top-left z-max">
         <Brand color={BACKGROUNDS[color]} />
       </div>
@@ -111,14 +121,18 @@ const Page = () => {
         {!file && <FileInput onChange={handleOnChange} />}
       </div>
 
-      <div className="bottom-right z-max button-stack">
-        {!!file && !image && <Button onClick={cycleColor}>{color}</Button>}
-        {!!file && !image && (
-          <Button onClick={matFile}>{loading ? "Matting..." : "Matte"}</Button>
-        )}
+      <div className="bottom-centered z-max">
         {!!file && !!image && <Button onClick={saveImage}>Save</Button>}
       </div>
-    </div>
+
+      <div className="bottom-right z-max button-stack">
+        {!!file && <Button onClick={cycleColor}>{color}</Button>}
+
+        {!!file && (
+          <Button onClick={matFile}>{loading ? "Matting..." : "Matte"}</Button>
+        )}
+      </div>
+    </Fragment>
   );
 };
 
