@@ -4,22 +4,19 @@ import BACKGROUNDS, { BackgroundColors } from "../../lib/backgrounds";
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse
+  res: NextApiResponse<Buffer | { success: boolean; error: string }>
 ) {
   if (req.method === "POST") {
     const { color } = req.query;
 
     try {
-      const upload = await new Promise(async (resolve, reject) => {
+      const upload = await new Promise<Buffer>((resolve, reject) => {
         let file = Buffer.from("");
 
         try {
-          await req.on(
-            "data",
-            (chunk) => (file = Buffer.concat([file, chunk]))
-          );
+          req.on("data", (chunk) => (file = Buffer.concat([file, chunk])));
 
-          await req.on("end", () => resolve(file));
+          req.on("end", () => resolve(file));
         } catch (err) {
           reject(err);
         }
@@ -44,13 +41,19 @@ export default async function handler(
       res.status(200).send(matted);
     } catch (err) {
       console.error(err);
-      res.status(400).json({ success: false, error: err.message });
+      res.status(400).json({
+        success: false,
+        error: err.message,
+      });
     }
 
     return;
   }
 
-  res.status(405).send("Method Not Allowed");
+  res.status(405).json({
+    success: false,
+    error: "Method Not Allowed",
+  });
 }
 
 export const config = {
