@@ -1,14 +1,13 @@
-import { Fragment, useRef, useState } from "react";
+import { ChangeEvent, Fragment, useRef, useState } from "react";
 import { useDrop, useStateList } from "react-use";
 import Brand from "../components/Brand";
 import Button from "../components/Button";
 import FileInput from "../components/FileInput";
 import BACKGROUNDS from "../lib/backgrounds";
-import { GOALS, trackGoal } from "../lib/fathom";
 
-const Page = () => {
-  const [file, setFile] = useState(undefined);
-  const [image, setImage] = useState(undefined);
+export default function Matt() {
+  const [file, setFile] = useState<File>(undefined);
+  const [image, setImage] = useState<Blob>(undefined);
   const [loading, setLoading] = useState(false);
 
   const { state: color, next, setStateAt } = useStateList(
@@ -16,7 +15,8 @@ const Page = () => {
   );
   const cycleColor = () => next();
 
-  const download = useRef(null);
+  const download = useRef<HTMLAnchorElement>(null);
+
   const saveImage = () => download.current.click();
 
   useDrop({
@@ -26,7 +26,7 @@ const Page = () => {
     },
   });
 
-  const handleSetFile = (file) => {
+  const handleSetFile = (file: File) => {
     if (!file.type.includes("image")) {
       window.alert("Not An Image\nThis file type is not allowed.");
       return;
@@ -43,7 +43,8 @@ const Page = () => {
     setFile(file);
   };
 
-  const handleOnChange = (e) => handleSetFile(e.target.files[0]);
+  const handleOnChange = (e: ChangeEvent<HTMLInputElement>) =>
+    handleSetFile(e.target.files[0]);
 
   const clearFile = () => {
     setImage(undefined);
@@ -69,8 +70,6 @@ const Page = () => {
         );
 
       const blob = await res.blob();
-
-      trackGoal(GOALS.PhotoMatted);
 
       setImage(blob);
       setLoading(false);
@@ -134,6 +133,4 @@ const Page = () => {
       </div>
     </Fragment>
   );
-};
-
-export default Page;
+}

@@ -1,6 +1,5 @@
 import { AppProps } from "next/app";
 import Head from "next/head";
-import Support from "../components/Support";
 import "../styles/app.css";
 
 export default function MatteApp({ Component, pageProps }: AppProps) {
@@ -11,10 +10,6 @@ export default function MatteApp({ Component, pageProps }: AppProps) {
       </Head>
 
       <Component {...pageProps} />
-
-      <div className="bottom-left">
-        <Support />
-      </div>
     </main>
   );
 }

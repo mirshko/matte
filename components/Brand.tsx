@@ -1,4 +1,6 @@
-const Brand = ({ color }) => {
+import { Background } from "../lib/backgrounds";
+
+const Brand = ({ color }: { color: Background }) => {
   const fill = `rgba(${color.r}, ${color.g}, ${color.b}, ${color.alpha})`;
 
   return (

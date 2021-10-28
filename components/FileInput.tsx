@@ -1,4 +1,4 @@
-const FileInput = ({ onChange, ...rest }) => (
+const FileInput = ({ onChange, ...rest }: JSX.IntrinsicElements["input"]) => (
   <div>
     <input
       id="file"

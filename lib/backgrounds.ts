@@ -1,4 +1,24 @@
-export default {
+export type Background = {
+  r: number;
+  g: number;
+  b: number;
+  alpha: number;
+};
+
+export type BackgroundColors =
+  | "White"
+  | "Black"
+  | "Blue"
+  | "Green"
+  | "Indigo"
+  | "Orange"
+  | "Pink"
+  | "Purple"
+  | "Red"
+  | "Teal"
+  | "Yellow";
+
+const backgrounds: Record<BackgroundColors, Background> = {
   White: {
     r: 255,
     g: 255,
@@ -66,3 +86,5 @@ export default {
     alpha: 1,
   },
 };
+
+export default backgrounds;

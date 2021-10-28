@@ -1,8 +1,4 @@
-/**
- * @name Button
- * @param {React.DetailedHTMLProps<React.ButtonHTMLAttributes<HTMLButtonElement>, HTMLButtonElement>} props
- */
-const Button = (props) => {
+const Button = (props: JSX.IntrinsicElements["button"]) => {
   return (
     <>
       <button {...props} />

@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next";
 import sharp from "sharp";
-import BACKGROUNDS from "../../lib/backgrounds";
+import BACKGROUNDS, { BackgroundColors } from "../../lib/backgrounds";
 
 export default async function handler(
   req: NextApiRequest,
@@ -36,7 +36,7 @@ export default async function handler(
           width: dimensions,
           height: dimensions,
           fit: "contain",
-          background: BACKGROUNDS[color],
+          background: BACKGROUNDS[color as BackgroundColors],
         })
         .withMetadata()
         .toBuffer();
