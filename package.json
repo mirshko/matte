@@ -14,11 +14,11 @@
   },
   "license": "ISC",
   "dependencies": {
-    "next": "^10.0.0",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "react-use": "^15.3.4",
-    "sharp": "^0.26.2"
+    "next": "^12.0.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-use": "^17.3.1",
+    "sharp": "^0.29.2"
   },
   "devDependencies": {
     "prettier": "^2.1.2"
