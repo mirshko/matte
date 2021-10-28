@@ -1,7 +1,11 @@
+import type { NextApiRequest, NextApiResponse } from "next";
 import sharp from "sharp";
 import BACKGROUNDS from "../../lib/backgrounds";
 
-export default async (req, res) => {
+export default async function handler(
+  req: NextApiRequest,
+  res: NextApiResponse
+) {
   if (req.method === "POST") {
     const { color } = req.query;
 
@@ -47,7 +51,7 @@ export default async (req, res) => {
   }
 
   res.status(405).send("Method Not Allowed");
-};
+}
 
 export const config = {
   api: {
