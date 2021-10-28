@@ -30,8 +30,10 @@ export default class MatteDocument extends Document {
             href="/apple-touch-icon@167.png"
           />
         </Head>
+
         <body>
           <Main />
+
           <NextScript />
         </body>
       </Html>

@@ -1,11 +1,9 @@
+import { AppProps } from "next/app";
 import Head from "next/head";
 import Support from "../components/Support";
-import useFathom from "../hooks/useFathom";
 import "../styles/app.css";
 
-export default function MatteApp({ Component, pageProps }) {
-  useFathom();
-
+export default function MatteApp({ Component, pageProps }: AppProps) {
   return (
     <main>
       <Head>
