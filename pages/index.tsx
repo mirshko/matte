@@ -83,7 +83,7 @@ export default function Matt() {
   return (
     <Fragment>
       <div className="top-left z-max">
-        <Brand color={BACKGROUNDS[color]} />
+        <Brand />
       </div>
 
       {!!file && (
