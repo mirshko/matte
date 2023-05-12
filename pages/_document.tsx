@@ -5,6 +5,7 @@ export default class MatteDocument extends Document {
     return (
       <Html lang="en">
         <Head>
+          <title>Matte.pics</title>
           <meta
             name="description"
             content="Give your photos that gallery quality aesthetic"
