@@ -10,9 +10,11 @@ export default function Matt() {
   const [image, setImage] = useState<Blob>(undefined);
   const [loading, setLoading] = useState(false);
 
-  const { state: color, next, setStateAt } = useStateList(
-    Object.keys(BACKGROUNDS)
-  );
+  const {
+    state: color,
+    next,
+    setStateAt,
+  } = useStateList(Object.keys(BACKGROUNDS));
   const cycleColor = () => next();
 
   const download = useRef<HTMLAnchorElement>(null);
@@ -33,7 +35,7 @@ export default function Matt() {
     }
 
     /**
-     * Seems its not truely 5 MB, perhaps due to the encoding of the image being sent to the server being larger than the actual image in the finder.
+     * Seems its not truly 5 MB, perhaps due to the encoding of the image being sent to the server being larger than the actual image in the finder.
      */
     if (file.size > 4.8e6) {
       window.alert("Picture Too Large\nThis image is greater than 5 MB.");
@@ -88,7 +90,7 @@ export default function Matt() {
 
       {!!file && (
         <div className="top-right z-max">
-          <Button onClick={clearFile}>New</Button>
+          <Button onClick={clearFile}>Reset</Button>
         </div>
       )}
 
