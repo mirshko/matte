@@ -18,7 +18,8 @@
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-use": "^17.4.0",
-    "sharp": "^0.32.1"
+    "sharp": "^0.32.1",
+    "zact": "^0.0.2"
   },
   "devDependencies": {
     "@types/node": "20.1.3",

@@ -90,3 +90,68 @@ body {
 .z-max {
   z-index: 99999;
 }
+
+.wrapper {
+  display: block;
+  height: 45px;
+  width: 45px;
+}
+
+button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: black;
+  line-height: inherit;
+  font-size: 17px;
+  padding: 10px 22px;
+  text-align: center;
+  font-weight: 600;
+  border-radius: 99999px;
+  background-color: white;
+  border: none;
+  appearance: none;
+}
+
+button:focus,
+button:active {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(131, 192, 253, 0.5);
+}
+
+input {
+  border: 0px;
+  clip: rect(0px, 0px, 0px, 0px);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0px;
+  position: absolute;
+  width: 1px;
+  white-space: nowrap;
+  overflow-wrap: normal;
+}
+
+input + label {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: black;
+  font-size: 17px;
+  padding: 10px 22px;
+  text-align: center;
+  font-weight: 600;
+  border-radius: 99999px;
+  white-space: nowrap;
+  background-color: white;
+  border: none;
+  appearance: none;
+}
+
+input:focus + label,
+input:active + label {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(131, 192, 253, 0.5);
+}
