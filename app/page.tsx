@@ -2,33 +2,57 @@
 
 import { useCallback, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
-import { getDataURLFromFile, matImage } from "./helpers";
+
+function applyPhotoMat(imageBitmap: ImageBitmap, color: string) {
+  const { width, height } = imageBitmap;
+
+  const maxDimension = Math.max(width, height);
+
+  const canvas = document.createElement("canvas");
+
+  canvas.width = maxDimension;
+  canvas.height = maxDimension;
+
+  /**
+   * @todo Move to OffscreenCanvas?
+   */
+  const ctx = canvas.getContext("2d");
+
+  ctx.fillStyle = color;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const x = canvas.width / 2 - width / 2;
+  const y = canvas.height / 2 - height / 2;
+
+  ctx.drawImage(imageBitmap, x, y, width, height);
+
+  return new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob((blob) => (blob ? resolve(blob) : reject()), "image/jpeg", 1);
+  });
+}
 
 export default function Page() {
   const download = useRef<HTMLAnchorElement>(null);
 
   const [fileName, fileNameSet] = useState<string>();
-
   const [color, colorSet] = useState<string>("#ffffff");
-
   const [fileDataURL, fileDataURLSet] = useState<string>();
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
-      const file = acceptedFiles[0];
+      if (acceptedFiles.at(0)) {
+        const file = acceptedFiles.at(0);
 
-      fileNameSet(file.name);
+        fileNameSet(file.name);
 
-      const dataUrl = await getDataURLFromFile(file);
+        const imageBitmap = await createImageBitmap(file);
 
-      const result = await matImage({
-        dataURL: dataUrl,
-        color,
-      });
+        const mattedImage = await applyPhotoMat(imageBitmap, color);
 
-      console.log(result);
+        const objectUrl = URL.createObjectURL(mattedImage);
 
-      fileDataURLSet(result);
+        fileDataURLSet(objectUrl);
+      }
     },
     [color, fileNameSet, fileDataURLSet]
   );
@@ -38,11 +62,7 @@ export default function Page() {
     maxFiles: 1,
     maxSize: 4.8e6,
     onDropRejected(fileRejections) {
-      if (!fileRejections[0].file.type.includes("image")) {
-        window.alert("Not An Image\nThis file type is not allowed.");
-      } else {
-        window.alert("Picture Too Large\nThis image is greater than 5 MB.");
-      }
+      window.alert(fileRejections.at(0).errors.at(0).message);
     },
     accept: {
       "image/*": [".jpeg", ".png"],
@@ -90,7 +110,10 @@ export default function Page() {
         <div className="fixed inset-x-8 mx-auto bottom-8 flex justify-center gap-8">
           <button
             className="p-4 bg-black text-white"
-            onClick={() => download.current.click()}
+            onClick={() => {
+              download.current.click();
+              URL.revokeObjectURL(fileDataURL);
+            }}
           >
             Save
           </button>
