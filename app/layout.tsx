@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import "../styles/app.css";
+import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Matte.pics",
@@ -45,25 +45,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body>
-        <div className="top-left z-max">
-          <a
-            href="https://reiner.systems"
-            rel="noopener"
-            target="_blank"
-            className="wrapper"
-          >
-            <svg width={45} height={45} viewBox="0 0 45 45" fill="none">
-              <title>Matte.pics</title>
-              <rect width={45} height={45} rx={11.25} fill={"#fff"} />
-              <path
-                fill="var(--primary)"
-                d="M10.195 10.195h24.609v24.609H10.195z"
-              />
-            </svg>
-          </a>
-        </div>
-
+      <body className="text-white bg-gray-200 antialiased text-[17px] leading-[1.47059] tracking-[-0.022em]">
         {children}
       </body>
     </html>
