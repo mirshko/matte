@@ -1,9 +1,9 @@
 "use server";
 
+import { colord } from "colord";
 import sharp from "sharp";
 import { zact } from "zact/server";
 import { z } from "zod";
-import backgrounds, { BackgroundColors } from "./backgrounds";
 
 export const mat = zact(
   z.object({
@@ -19,11 +19,13 @@ export const mat = zact(
 
   const dimensions = Math.max(metadata.width, metadata.height);
 
+  const { r, g, b } = colord(color).toRgb();
+
   const matted = original.resize({
     width: dimensions,
     height: dimensions,
     fit: "contain",
-    background: backgrounds[color as BackgroundColors],
+    background: { r, g, b, alpha: 1 },
   });
 
   const buf = await matted.withMetadata().toBuffer();

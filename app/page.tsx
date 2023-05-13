@@ -1,80 +1,87 @@
 "use client";
 
-import { useRef, useState } from "react";
-import { useDrop, useStateList } from "react-use";
+import { useCallback, useRef, useState } from "react";
 import { useZact } from "zact/client";
-import backgrounds from "../lib/backgrounds";
-import { mat } from "../lib/mat";
-import toBase64 from "../lib/toBase64";
+import { mat } from "./mat";
+import toBase64 from "./toBase64";
+import { useDropzone } from "react-dropzone";
 
 export default function Page() {
   const download = useRef<HTMLAnchorElement>(null);
 
-  const [file, setFile] = useState<File>(undefined);
+  const [file, fileSet] = useState<File>(undefined);
 
-  const { state, next } = useStateList(Object.keys(backgrounds));
+  const [color, colorSet] = useState<string>("#ffffff");
 
   const { mutate, data } = useZact(mat);
 
-  useDrop({
-    onFiles: (files) => {
-      handleSetFile(files[0]);
+  const onDrop = useCallback(
+    async (acceptedFiles: File[]) => {
+      const file = acceptedFiles[0];
+
+      fileSet(file);
+
+      const base64 = await toBase64(file);
+
+      await mutate({ base64, color });
+    },
+    [color, fileSet, mutate]
+  );
+
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+    onDrop,
+    maxFiles: 1,
+    maxSize: 4.8e6,
+    onDropRejected(fileRejections) {
+      if (!fileRejections[0].file.type.includes("image")) {
+        window.alert("Not An Image\nThis file type is not allowed.");
+      } else {
+        window.alert("Picture Too Large\nThis image is greater than 5 MB.");
+      }
+    },
+    accept: {
+      "image/*": [".jpeg", ".png"],
     },
   });
 
-  const handleSetFile = async (file: File) => {
-    if (!file.type.includes("image")) {
-      window.alert("Not An Image\nThis file type is not allowed.");
-      return;
-    }
-
-    /**
-     * Seems its not truly 5 MB, perhaps due to the encoding of the image being sent to the server being larger than the actual image in the finder.
-     */
-    if (file.size > 4.8e6) {
-      window.alert("Picture Too Large\nThis image is greater than 5 MB.");
-      return;
-    }
-
-    setFile(file);
-
-    const base64 = await toBase64(file);
-
-    await mutate({ base64, color: state });
-  };
-
   return (
-    <>
-      <div className="middle-centered">
-        {data ? (
-          <>
-            <img className="img" alt={file.name} src={data} />
-            <a hidden ref={download} download={file.name} href={data} />
-          </>
-        ) : (
-          <>
-            <input
-              id="file"
-              type="file"
-              accept="image/*"
-              onChange={(event) => handleSetFile(event.target.files[0])}
-            />
-            <label htmlFor="file">
-              <span>Drag & Drop or Browse</span>
-            </label>
-          </>
-        )}
-      </div>
+    <div className="fixed inset-0">
+      {data ? (
+        <div className="w-96 h-96 md:w-[40rem] md:h-[40rem]">
+          <img
+            className="object-contain align-middle aspect-square w-full h-full"
+            alt={file.name}
+            src={data}
+          />
+          <a hidden ref={download} download={file.name} href={data} />
+        </div>
+      ) : (
+        <div
+          className={`w-96 h-96 md:w-[40rem] md:h-[40rem] object-contain flex items-center`}
+          style={{ backgroundColor: color }}
+          {...getRootProps()}
+        >
+          <input {...getInputProps()} />
 
-      <div className="bottom-right z-max button-stack">
-        <button onClick={() => next()}>{state}</button>
-      </div>
-
-      {data && (
-        <div className="bottom-centered z-max">
-          <button onClick={() => download.current.click()}>Save</button>
+          <div className="aspect-[3/2] w-full bg-gray-100 flex items-center justify-center">
+            <p className="text-black text-lg font-bold text-center">
+              Drag & Drop or Browse
+            </p>
+          </div>
         </div>
       )}
-    </>
+
+      <div className="absolute top-8 right-8">
+        <input
+          id="color"
+          type="color"
+          name="color"
+          value={color}
+          onChange={(event) => colorSet(event.target.value)}
+        />
+      </div>
+
+      {data && <button onClick={() => download.current.click()}>Save</button>}
+    </div>
   );
 }
