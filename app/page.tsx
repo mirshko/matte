@@ -1,30 +1,36 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import { mat } from "./mat";
-import { getDataURLFromFile, useZact } from "./helpers";
 import { useDropzone } from "react-dropzone";
+import { getDataURLFromFile, matImage } from "./helpers";
 
 export default function Page() {
   const download = useRef<HTMLAnchorElement>(null);
 
-  const [file, fileSet] = useState<File>(undefined);
+  const [fileName, fileNameSet] = useState<string>();
 
   const [color, colorSet] = useState<string>("#ffffff");
 
-  const { mutate, data, reset } = useZact(mat);
+  const [fileDataURL, fileDataURLSet] = useState<string>();
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
       const file = acceptedFiles[0];
 
-      fileSet(file);
+      fileNameSet(file.name);
 
-      const dataURL = await getDataURLFromFile(file);
+      const dataUrl = await getDataURLFromFile(file);
 
-      await mutate({ dataURL, color });
+      const result = await matImage({
+        dataURL: dataUrl,
+        color,
+      });
+
+      console.log(result);
+
+      fileDataURLSet(result);
     },
-    [color, fileSet, mutate]
+    [color, fileNameSet, fileDataURLSet]
   );
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -45,14 +51,14 @@ export default function Page() {
 
   return (
     <>
-      {data ? (
+      {fileDataURL ? (
         <div className="w-96 h-96 md:w-[40rem] md:h-[40rem]">
           <img
             className="object-contain align-middle aspect-square w-full h-full"
-            alt={file.name}
-            src={data}
+            alt={fileName}
+            src={fileDataURL}
           />
-          <a hidden ref={download} download={file.name} href={data} />
+          <a hidden ref={download} download={fileName} href={fileDataURL} />
         </div>
       ) : (
         <div
@@ -80,7 +86,7 @@ export default function Page() {
         />
       </div>
 
-      {data && (
+      {fileDataURL && (
         <div className="fixed inset-x-8 mx-auto bottom-8 flex justify-center gap-8">
           <button
             className="p-4 bg-black text-white"
@@ -89,7 +95,13 @@ export default function Page() {
             Save
           </button>
 
-          <button className="p-4 bg-black text-white" onClick={() => reset()}>
+          <button
+            className="p-4 bg-black text-white"
+            onClick={() => {
+              fileDataURLSet(undefined);
+              fileNameSet(undefined);
+            }}
+          >
             New
           </button>
         </div>
