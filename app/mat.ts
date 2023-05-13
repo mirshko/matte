@@ -7,13 +7,13 @@ import { z } from "zod";
 
 export const mat = zact(
   z.object({
-    base64: z.string(),
+    dataURL: z.string(),
     color: z.string(),
   })
-)(async ({ base64, color }) => {
-  const uri = Buffer.from(base64.split(";base64,").pop(), "base64");
+)(async ({ dataURL, color }) => {
+  const uri = dataURL.split(";base64,").pop();
 
-  const original = sharp(uri);
+  const original = sharp(Buffer.from(uri, "base64"));
 
   const metadata = await original.metadata();
 

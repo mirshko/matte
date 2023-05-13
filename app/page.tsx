@@ -1,9 +1,8 @@
 "use client";
 
 import { useCallback, useRef, useState } from "react";
-import { useZact } from "zact/client";
 import { mat } from "./mat";
-import toBase64 from "./toBase64";
+import { getDataURLFromFile, useZact } from "./helpers";
 import { useDropzone } from "react-dropzone";
 
 export default function Page() {
@@ -13,7 +12,7 @@ export default function Page() {
 
   const [color, colorSet] = useState<string>("#ffffff");
 
-  const { mutate, data } = useZact(mat);
+  const { mutate, data, reset } = useZact(mat);
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
@@ -21,14 +20,14 @@ export default function Page() {
 
       fileSet(file);
 
-      const base64 = await toBase64(file);
+      const dataURL = await getDataURLFromFile(file);
 
-      await mutate({ base64, color });
+      await mutate({ dataURL, color });
     },
     [color, fileSet, mutate]
   );
 
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({
+  const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     maxFiles: 1,
     maxSize: 4.8e6,
@@ -45,7 +44,7 @@ export default function Page() {
   });
 
   return (
-    <div className="fixed inset-0">
+    <>
       {data ? (
         <div className="w-96 h-96 md:w-[40rem] md:h-[40rem]">
           <img
@@ -71,7 +70,7 @@ export default function Page() {
         </div>
       )}
 
-      <div className="absolute top-8 right-8">
+      <div className="fixed top-8 right-8">
         <input
           id="color"
           type="color"
@@ -81,7 +80,20 @@ export default function Page() {
         />
       </div>
 
-      {data && <button onClick={() => download.current.click()}>Save</button>}
-    </div>
+      {data && (
+        <div className="fixed inset-x-8 mx-auto bottom-8 flex justify-center gap-8">
+          <button
+            className="p-4 bg-black text-white"
+            onClick={() => download.current.click()}
+          >
+            Save
+          </button>
+
+          <button className="p-4 bg-black text-white" onClick={() => reset()}>
+            New
+          </button>
+        </div>
+      )}
+    </>
   );
 }
