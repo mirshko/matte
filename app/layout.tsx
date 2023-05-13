@@ -6,6 +6,7 @@ export const metadata: Metadata = {
   description: "Give your photos that gallery quality aesthetic",
   manifest: "/manifest.json",
   themeColor: "#301934",
+  metadataBase: new URL("https://matte.pics"),
   icons: [
     {
       rel: "icon",
