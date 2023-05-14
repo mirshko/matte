@@ -1,7 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { useCallback, useRef, useState } from "react";
 import { useDropzone } from "react-dropzone";
+import frame from "./frame_alt.png";
 
 function applyPhotoMat(imageBitmap: ImageBitmap, color: string) {
   const { width, height } = imageBitmap;
@@ -71,39 +73,62 @@ export default function Page() {
 
   return (
     <>
-      {fileDataURL ? (
-        <div className="w-96 h-96 md:w-[40rem] md:h-[40rem]">
-          <img
-            className="object-contain align-middle aspect-square w-full h-full"
-            alt={fileName}
-            src={fileDataURL}
-          />
-          <a hidden ref={download} download={fileName} href={fileDataURL} />
-        </div>
-      ) : (
-        <div
-          className={`w-96 h-96 md:w-[40rem] md:h-[40rem] object-contain flex items-center`}
-          style={{ backgroundColor: color }}
-          {...getRootProps()}
-        >
-          <input {...getInputProps()} />
-
-          <div className="aspect-[3/2] w-full bg-gray-100 flex items-center justify-center">
-            <p className="text-black text-lg font-bold text-center">
-              Drag & Drop or Browse
-            </p>
+      <div className="relative md:p-[74px] w-96 h-96 md:w-[40rem] md:h-[40rem]">
+        {fileDataURL ? (
+          <div className="w-full h-full">
+            <img
+              className="object-contain align-middle aspect-square w-full h-full"
+              alt={fileName}
+              src={fileDataURL}
+            />
+            <a hidden ref={download} download={fileName} href={fileDataURL} />
           </div>
-        </div>
-      )}
+        ) : (
+          <div
+            className={`w-full h-full object-contain flex items-center`}
+            style={{ backgroundColor: color }}
+            {...getRootProps()}
+          >
+            <input {...getInputProps()} />
 
-      <div className="fixed top-8 right-8">
-        <input
-          id="color"
-          type="color"
-          name="color"
-          value={color}
-          onChange={(event) => colorSet(event.target.value)}
-        />
+            <div className="aspect-[3/2] w-full bg-gray-100 flex items-center justify-center">
+              <p className="text-black text-lg font-bold text-center">
+                Drag & Drop or Browse
+              </p>
+            </div>
+          </div>
+        )}
+
+        <div className="hidden absolute inset-0 w-full h-full md:flex pointer-events-none">
+          <Image
+            alt=""
+            draggable={false}
+            height={720}
+            priority
+            src={frame}
+            width={720}
+          />
+        </div>
+      </div>
+
+      <div className="fixed top-8 left-8">
+        <label htmlFor="color">
+          <p className="block text-sm font-medium leading-6 text-gray-900">
+            Matte Color
+          </p>
+
+          <div className="flex gap-2 items-center mt-1">
+            <input
+              className="appearance-none"
+              id="color"
+              type="color"
+              name="color"
+              value={color}
+              onChange={(event) => colorSet(event.target.value)}
+            />
+            <p className="text-black text-sm font-semibold">{color}</p>
+          </div>
+        </label>
       </div>
 
       {fileDataURL && (
