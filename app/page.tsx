@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useRef, useState } from "react";
+import { ChangeEvent, useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import frame from "./frame_alt.png";
 
@@ -34,35 +34,71 @@ function applyPhotoMat(imageBitmap: ImageBitmap, color: string) {
 }
 
 export default function Page() {
-  const download = useRef<HTMLAnchorElement>(null);
-
-  const [fileName, fileNameSet] = useState<string>();
   const [color, colorSet] = useState<string>("#ffffff");
-  const [fileDataURL, fileDataURLSet] = useState<string>();
+  const [fileData, fileDataSet] = useState<File>();
 
   const onDrop = useCallback(
     async (acceptedFiles: File[]) => {
       if (acceptedFiles.at(0)) {
         const file = acceptedFiles.at(0);
 
-        fileNameSet(file.name);
-
         const imageBitmap = await createImageBitmap(file);
 
         const mattedImage = await applyPhotoMat(imageBitmap, color);
 
-        const objectUrl = URL.createObjectURL(mattedImage);
-
-        fileDataURLSet(objectUrl);
+        fileDataSet(
+          new File([mattedImage], `${file.name} - Matted`, {
+            type: "image/jpeg",
+          })
+        );
       }
     },
-    [color, fileNameSet, fileDataURLSet]
+    [color, fileDataSet]
   );
+
+  const saveFile = () => {
+    const objectUrl = URL.createObjectURL(fileData);
+
+    const anchor = document.createElement("a");
+    anchor.href = objectUrl;
+    anchor.download = fileData.name;
+    anchor.click();
+
+    URL.revokeObjectURL(objectUrl);
+  };
+
+  const handleShareOrSave = async () => {
+    if (!navigator.canShare) {
+      window.alert(`Your browser doesn't support the Web Share API.`);
+
+      saveFile();
+
+      return;
+    }
+
+    if (navigator.canShare({ files: [fileData] })) {
+      try {
+        await navigator.share({
+          files: [fileData],
+          title: fileData.name,
+        });
+
+        console.log("Shared");
+      } catch (error) {
+        console.error(`Error: ${error.message}`);
+      }
+
+      return;
+    }
+
+    console.error(`Your system doesn't support sharing these files.`);
+
+    saveFile();
+  };
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
     maxFiles: 1,
-    maxSize: 4.8e6,
     onDropRejected(fileRejections) {
       window.alert(fileRejections.at(0).errors.at(0).message);
     },
@@ -72,30 +108,36 @@ export default function Page() {
   });
 
   return (
-    <>
-      <div className="relative md:p-[74px] w-96 h-96 md:w-[40rem] md:h-[40rem]">
-        {fileDataURL ? (
-          <div className="w-full h-full">
-            <img
-              className="object-contain align-middle aspect-square w-full h-full"
-              alt={fileName}
-              src={fileDataURL}
-            />
-            <a hidden ref={download} download={fileName} href={fileDataURL} />
-          </div>
+    <div className="flex flex-col gap-8 items-center">
+      <div className="relative md:p-[74px] w-96 h-96 md:w-[40rem] md:h-[40rem] flex">
+        {fileData ? (
+          <img
+            className="object-contain aspect-square w-full h-full"
+            alt=""
+            src={URL.createObjectURL(fileData)}
+          />
         ) : (
           <div
-            className={`w-full h-full object-contain flex items-center`}
+            className="w-full h-full object-contain flex items-center justify-center relative group"
             style={{ backgroundColor: color }}
             {...getRootProps()}
           >
             <input {...getInputProps()} />
 
-            <div className="aspect-[3/2] w-full bg-gray-100 flex items-center justify-center">
-              <p className="text-black text-lg font-bold text-center">
-                Drag & Drop or Browse
-              </p>
-            </div>
+            <svg
+              className="h-full aspect-[3/4] border border-gray-300 bg-gray-50 text-gray-300 group-hover:text-indigo-300 group-hover:border-indigo-300 group-hover:bg-indigo-50"
+              preserveAspectRatio="none"
+              stroke="currentColor"
+              fill="none"
+              viewBox="0 0 200 200"
+              aria-hidden="true"
+            >
+              <path
+                vectorEffect="non-scaling-stroke"
+                strokeWidth={1}
+                d="M0 0l200 200M0 200L200 0"
+              />
+            </svg>
           </div>
         )}
 
@@ -111,49 +153,42 @@ export default function Page() {
         </div>
       </div>
 
-      <div className="fixed top-8 left-8">
-        <label htmlFor="color">
-          <p className="block text-sm font-medium leading-6 text-gray-900">
-            Matte Color
-          </p>
+      <div className="flex justify-between gap-8">
+        <label
+          className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 font-mono cursor-pointer"
+          htmlFor="color"
+        >
+          <span>{color}</span>
 
-          <div className="flex gap-2 items-center mt-1">
-            <input
-              className="appearance-none"
-              id="color"
-              type="color"
-              name="color"
-              value={color}
-              onChange={(event) => colorSet(event.target.value)}
-            />
-            <p className="text-black text-sm font-semibold">{color}</p>
-          </div>
+          <input
+            className="sr-only"
+            id="color"
+            type="color"
+            value={color}
+            onChange={(event) => colorSet(event.target.value)}
+          />
         </label>
+
+        {fileData && (
+          <span className="isolate inline-flex rounded-md shadow-sm">
+            <button
+              className="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+              onClick={handleShareOrSave}
+              type="button"
+            >
+              Share
+            </button>
+
+            <button
+              className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+              onClick={() => fileDataSet(undefined)}
+              type="button"
+            >
+              Restart
+            </button>
+          </span>
+        )}
       </div>
-
-      {fileDataURL && (
-        <div className="fixed inset-x-8 mx-auto bottom-8 flex justify-center gap-8">
-          <button
-            className="p-4 bg-black text-white"
-            onClick={() => {
-              download.current.click();
-              URL.revokeObjectURL(fileDataURL);
-            }}
-          >
-            Save
-          </button>
-
-          <button
-            className="p-4 bg-black text-white"
-            onClick={() => {
-              fileDataURLSet(undefined);
-              fileNameSet(undefined);
-            }}
-          >
-            New
-          </button>
-        </div>
-      )}
-    </>
+    </div>
   );
 }
