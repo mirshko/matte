@@ -35,40 +35,39 @@ function applyPhotoMat(imageBitmap: ImageBitmap, color: string) {
 
 export default function Page() {
   const [color, colorSet] = useState<string>("#ffffff");
-  const [fileData, fileDataSet] = useState<File>();
-
-  const onDrop = useCallback(
-    async (acceptedFiles: File[]) => {
-      if (acceptedFiles.at(0)) {
-        const file = acceptedFiles.at(0);
-
-        const imageBitmap = await createImageBitmap(file);
-
-        const mattedImage = await applyPhotoMat(imageBitmap, color);
-
-        fileDataSet(
-          new File([mattedImage], `${file.name} - Matted`, {
-            type: "image/jpeg",
-          })
-        );
-      }
-    },
-    [color, fileDataSet]
-  );
+  const [fileBlob, fileBlobSet] = useState<Blob>();
+  const [fileName, fileNameSet] = useState<string>();
 
   const saveFile = () => {
-    const objectUrl = URL.createObjectURL(fileData);
+    const objectUrl = URL.createObjectURL(fileBlob);
 
     const anchor = document.createElement("a");
     anchor.href = objectUrl;
-    anchor.download = fileData.name;
+    anchor.download = fileName;
     anchor.click();
 
     URL.revokeObjectURL(objectUrl);
   };
 
+  const clearFile = () => {
+    fileNameSet(undefined);
+    fileBlobSet(undefined);
+  };
+
   const { getRootProps, getInputProps } = useDropzone({
-    onDrop,
+    async onDrop(acceptedFiles) {
+      if (acceptedFiles.at(0)) {
+        const file = acceptedFiles.at(0);
+
+        fileNameSet(file.name);
+
+        const imageBitmap = await createImageBitmap(file);
+
+        const mattedImage = await applyPhotoMat(imageBitmap, color);
+
+        fileBlobSet(mattedImage);
+      }
+    },
     maxFiles: 1,
     onDropRejected(fileRejections) {
       window.alert(fileRejections.at(0).errors.at(0).message);
@@ -81,11 +80,11 @@ export default function Page() {
   return (
     <div className="flex flex-col gap-8 items-center">
       <div className="relative md:p-[74px] w-96 h-96 md:w-[40rem] md:h-[40rem] flex">
-        {fileData ? (
+        {fileBlob ? (
           <img
             className="object-contain aspect-square w-full h-full"
             alt=""
-            src={URL.createObjectURL(fileData)}
+            src={URL.createObjectURL(fileBlob)}
           />
         ) : (
           <div
@@ -140,7 +139,7 @@ export default function Page() {
           />
         </label>
 
-        {fileData && (
+        {fileBlob && (
           <span className="isolate inline-flex rounded-md shadow-sm">
             <button
               className="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
@@ -152,7 +151,7 @@ export default function Page() {
 
             <button
               className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
-              onClick={() => fileDataSet(undefined)}
+              onClick={() => clearFile()}
               type="button"
             >
               Restart
