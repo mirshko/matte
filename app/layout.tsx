@@ -5,7 +5,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Matte.pics",
   description: "Give your photos that gallery quality aesthetic",
-  themeColor: "#ffffff",
+  themeColor: "#e5e7eb",
   metadataBase: new URL("https://matte.pics"),
   icons: [],
   twitter: {
@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   appleWebApp: {
     title: "Matte.pics",
     capable: true,
-    statusBarStyle: "black-translucent",
+    statusBarStyle: "black",
   },
   openGraph: {
     title: "Matte.pics",
