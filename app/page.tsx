@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { ChangeEvent, useCallback, useState } from "react";
+import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import frame from "./frame_alt.png";
 
@@ -65,35 +65,6 @@ export default function Page() {
     anchor.click();
 
     URL.revokeObjectURL(objectUrl);
-  };
-
-  const handleShareOrSave = async () => {
-    if (!navigator.canShare) {
-      window.alert(`Your browser doesn't support the Web Share API.`);
-
-      saveFile();
-
-      return;
-    }
-
-    if (navigator.canShare({ files: [fileData] })) {
-      try {
-        await navigator.share({
-          files: [fileData],
-          title: fileData.name,
-        });
-
-        console.log("Shared");
-      } catch (error) {
-        console.error(`Error: ${error.message}`);
-      }
-
-      return;
-    }
-
-    console.error(`Your system doesn't support sharing these files.`);
-
-    saveFile();
   };
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -173,10 +144,10 @@ export default function Page() {
           <span className="isolate inline-flex rounded-md shadow-sm">
             <button
               className="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
-              onClick={handleShareOrSave}
+              onClick={() => saveFile()}
               type="button"
             >
-              Share
+              Save
             </button>
 
             <button
