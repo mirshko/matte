@@ -1,6 +1,6 @@
 {
   "name": "matte",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "author": "@mirshko <jeff@reiner.design>",
   "description": "Give your photos that gallery quality aesthetic",
   "private": false,
@@ -14,17 +14,21 @@
   },
   "license": "ISC",
   "dependencies": {
-    "next": "^12.0.1",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
-    "react-use": "^17.3.1",
-    "sharp": "^0.29.2"
+    "@vercel/analytics": "^1.0.1",
+    "next": "^13.4.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-dropzone": "^14.2.3",
+    "sharp": "^0.32.1"
   },
   "devDependencies": {
-    "@types/react": "^17.0.33",
-    "@types/sharp": "^0.29.2",
-    "prettier": "^2.1.2",
-    "typescript": "^4.4.4"
+    "@types/node": "20.1.4",
+    "@types/react": "^18.2.6",
+    "autoprefixer": "^10.4.14",
+    "postcss": "^8.4.23",
+    "prettier": "^2.8.8",
+    "tailwindcss": "^3.3.2",
+    "typescript": "^5.0.4"
   },
   "repository": {
     "type": "git",
