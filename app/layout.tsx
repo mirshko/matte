@@ -197,7 +197,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className="text-white bg-gray-200 antialiased text-[17px] leading-[1.47059] tracking-[-0.022em] grid place-items-center min-h-screen h-full"
+        className="text-white bg-gray-200 antialiased"
         style={{ WebkitTapHighlightColor: "transparent" }}
       >
         {children}

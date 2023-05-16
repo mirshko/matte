@@ -78,7 +78,7 @@ export default function Page() {
   });
 
   return (
-    <div className="flex flex-col gap-8 items-center">
+    <div className="fixed top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2 flex flex-col gap-8 items-center">
       <div className="relative md:p-[74px] w-96 h-96 md:w-[40rem] md:h-[40rem] flex">
         {fileBlob ? (
           <img
