@@ -1,8 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
-import { useDropzone } from "react-dropzone";
+import { ChangeEvent, useState } from "react";
 import frame from "./frame_alt.png";
 
 function applyPhotoMat(imageBitmap: ImageBitmap, color: string) {
@@ -54,28 +53,21 @@ export default function Page() {
     fileBlobSet(undefined);
   };
 
-  const { getRootProps, getInputProps } = useDropzone({
-    async onDrop(acceptedFiles) {
-      if (acceptedFiles.at(0)) {
-        const file = acceptedFiles.at(0);
+  const handleFiles = async (event: ChangeEvent<HTMLInputElement>) => {
+    const acceptedFiles = event.target.files;
 
-        fileNameSet(file.name);
+    if (acceptedFiles.item(0)) {
+      const file = acceptedFiles.item(0);
 
-        const imageBitmap = await createImageBitmap(file);
+      fileNameSet(file.name);
 
-        const mattedImage = await applyPhotoMat(imageBitmap, color);
+      const imageBitmap = await createImageBitmap(file);
 
-        fileBlobSet(mattedImage);
-      }
-    },
-    maxFiles: 1,
-    onDropRejected(fileRejections) {
-      window.alert(fileRejections.at(0).errors.at(0).message);
-    },
-    accept: {
-      "image/*": [".jpeg", ".png"],
-    },
-  });
+      const mattedImage = await applyPhotoMat(imageBitmap, color);
+
+      fileBlobSet(mattedImage);
+    }
+  };
 
   return (
     <div className="fixed top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2 flex flex-col gap-8 items-center">
@@ -87,15 +79,22 @@ export default function Page() {
             src={URL.createObjectURL(fileBlob)}
           />
         ) : (
-          <div
-            className="w-full h-full object-contain flex items-center justify-center relative group"
+          <label
+            htmlFor="file-upload"
+            className="w-full h-full object-contain flex items-center justify-center relative group cursor-pointer"
             style={{ backgroundColor: color }}
-            {...getRootProps()}
           >
-            <input {...getInputProps()} />
-
+            <input
+              id="file-upload"
+              accept="image/*,.jpeg,.png"
+              type="file"
+              className="sr-only"
+              onChange={handleFiles}
+            />
             <svg
-              className="h-full aspect-[3/4] border border-gray-300 bg-gray-50 text-gray-300 group-hover:text-indigo-300 group-hover:border-indigo-300 group-hover:bg-indigo-50"
+              className="h-full aspect-[3/4] border border-gray-300 bg-gray-50 text-gray-300 group-hover:text-indigo-300 group-hover:border-indigo-300 group-hover:bg-indigo-50 group-focus-within:text-indigo-300
+              group-focus-within:border-indigo-300
+              group-focus-within:bg-indigo-50"
               preserveAspectRatio="none"
               stroke="currentColor"
               fill="none"
@@ -108,7 +107,7 @@ export default function Page() {
                 d="M0 0l200 200M0 200L200 0"
               />
             </svg>
-          </div>
+          </label>
         )}
 
         <div className="hidden absolute inset-0 w-full h-full md:flex pointer-events-none">
@@ -129,7 +128,6 @@ export default function Page() {
           htmlFor="color"
         >
           <span>{color}</span>
-
           <input
             className="sr-only"
             id="color"
@@ -143,16 +141,14 @@ export default function Page() {
           <span className="isolate inline-flex rounded-md shadow-sm">
             <button
               className="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
-              onClick={() => saveFile()}
-              type="button"
+              onClick={saveFile}
             >
               Save
             </button>
 
             <button
               className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
-              onClick={() => clearFile()}
-              type="button"
+              onClick={clearFile}
             >
               Restart
             </button>
