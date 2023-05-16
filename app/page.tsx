@@ -14,9 +14,6 @@ function applyPhotoMat(imageBitmap: ImageBitmap, color: string) {
   canvas.width = maxDimension;
   canvas.height = maxDimension;
 
-  /**
-   * @todo Move to OffscreenCanvas?
-   */
   const ctx = canvas.getContext("2d");
 
   ctx.fillStyle = color;
@@ -54,21 +51,15 @@ export default function Page() {
   };
 
   const handleFiles = async (event: ChangeEvent<HTMLInputElement>) => {
-    const acceptedFiles = event.target.files;
+    const file = event.target.files.item(0);
 
-    if (acceptedFiles.item(0)) {
-      const file = acceptedFiles.item(0);
+    fileNameSet(file.name);
 
-      console.log(file);
+    const imageBitmap = await createImageBitmap(file);
 
-      fileNameSet(file.name);
+    const mattedImage = await applyPhotoMat(imageBitmap, color);
 
-      const imageBitmap = await createImageBitmap(file);
-
-      const mattedImage = await applyPhotoMat(imageBitmap, color);
-
-      fileBlobSet(mattedImage);
-    }
+    fileBlobSet(mattedImage);
   };
 
   return (
