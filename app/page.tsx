@@ -59,6 +59,8 @@ export default function Page() {
     if (acceptedFiles.item(0)) {
       const file = acceptedFiles.item(0);
 
+      console.log(file);
+
       fileNameSet(file.name);
 
       const imageBitmap = await createImageBitmap(file);
@@ -86,7 +88,7 @@ export default function Page() {
           >
             <input
               id="file-upload"
-              accept="image/*,.jpeg,.png"
+              accept="image/png, image/jpeg"
               type="file"
               className="sr-only"
               onChange={handleFiles}
@@ -140,14 +142,14 @@ export default function Page() {
         {fileBlob && (
           <span className="isolate inline-flex rounded-md shadow-sm">
             <button
-              className="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+              className="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
               onClick={saveFile}
             >
               Save
             </button>
 
             <button
-              className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:z-10"
+              className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
               onClick={clearFile}
             >
               Restart
