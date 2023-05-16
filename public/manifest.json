@@ -1,6 +1,7 @@
 {
   "display": "standalone",
   "short_name": "Matte",
+  "theme_color": "#e5e7eb",
   "icons": [
     {
       "src": "public/manifest-icon-192.maskable.png",
