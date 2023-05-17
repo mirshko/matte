@@ -10,7 +10,7 @@
     "build": "next build",
     "start": "next start",
     "format": "prettier --write \"**/*.js\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "generate-pwa-assets": "pwa-asset-generator ./frame.svg ./public --background \"#e5e7eb\" --padding \"0px\" --favicon --quality 100"
   },
   "license": "ISC",
   "dependencies": {
@@ -26,6 +26,7 @@
     "autoprefixer": "^10.4.14",
     "postcss": "^8.4.23",
     "prettier": "^2.8.8",
+    "pwa-asset-generator": "^6.3.0",
     "tailwindcss": "^3.3.2",
     "typescript": "^5.0.4"
   },
