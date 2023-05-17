@@ -16,6 +16,11 @@ export const metadata: Metadata = {
   manifest: new URL("https://matte.pics/manifest.json"),
   icons: [
     {
+      rel: "icon",
+      type: "image/png",
+      url: "/favicon-196.png",
+    },
+    {
       rel: "apple-touch-icon",
       url: "/apple-icon-180.png",
     },
