@@ -4,7 +4,9 @@ import Image from "next/image";
 import { ChangeEvent, useState } from "react";
 import frame from "./frame_alt.png";
 
-function applyPhotoMat(imageBitmap: ImageBitmap, color: string) {
+async function applyMatteToImage(file: File, color: string) {
+  const imageBitmap = await createImageBitmap(file);
+
   const { width, height } = imageBitmap;
 
   const maxDimension = Math.max(width, height);
@@ -31,45 +33,47 @@ function applyPhotoMat(imageBitmap: ImageBitmap, color: string) {
 
 export default function Page() {
   const [color, colorSet] = useState<string>("#ffffff");
-  const [fileBlob, fileBlobSet] = useState<Blob>();
-  const [fileName, fileNameSet] = useState<string>();
+  const [rawFile, rawFileSet] = useState<File>();
+  const [processedBlob, processedBlobSet] = useState<Blob>();
 
   const saveFile = () => {
-    const objectUrl = URL.createObjectURL(fileBlob);
+    const objectUrl = URL.createObjectURL(processedBlob);
 
     const anchor = document.createElement("a");
     anchor.href = objectUrl;
-    anchor.download = fileName;
+    anchor.download = rawFile.name;
     anchor.click();
 
     URL.revokeObjectURL(objectUrl);
   };
 
   const clearFile = () => {
-    fileNameSet(undefined);
-    fileBlobSet(undefined);
+    rawFileSet(undefined);
+    processedBlobSet(undefined);
   };
 
   const handleFiles = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files.item(0);
 
-    fileNameSet(file.name);
+    rawFileSet(file);
 
-    const imageBitmap = await createImageBitmap(file);
+    const blob = await applyMatteToImage(file, color);
 
-    const mattedImage = await applyPhotoMat(imageBitmap, color);
+    processedBlobSet(blob);
+  };
 
-    fileBlobSet(mattedImage);
+  const handleColor = async (event: ChangeEvent<HTMLInputElement>) => {
+    colorSet(event.target.value);
   };
 
   return (
     <div className="fixed top-1/2 -translate-x-1/2 left-1/2 -translate-y-1/2 flex flex-col gap-8 items-center">
-      <div className="relative md:p-[74px] w-96 h-96 md:w-[40rem] md:h-[40rem] flex">
-        {fileBlob ? (
+      <div className="relative md:p-[75px] w-96 h-96 md:w-[40rem] md:h-[40rem] flex">
+        {processedBlob ? (
           <img
             className="object-contain aspect-square w-full h-full"
             alt=""
-            src={URL.createObjectURL(fileBlob)}
+            src={URL.createObjectURL(processedBlob)}
           />
         ) : (
           <label
@@ -85,9 +89,9 @@ export default function Page() {
               onChange={handleFiles}
             />
             <svg
-              className="h-full aspect-[3/4] border border-gray-300 bg-gray-50 text-gray-300 group-hover:text-indigo-300 group-hover:border-indigo-300 group-hover:bg-indigo-50 group-focus-within:text-indigo-300
-              group-focus-within:border-indigo-300
-              group-focus-within:bg-indigo-50"
+              className="h-full aspect-[3/4] border-4 border-gray-300 bg-gray-50 text-gray-300 group-hover:text-gray-400 group-hover:border-gray-400 group-hover:bg-gray-100 group-focus-within:text-gray-400
+              group-focus-within:border-gray-400
+              group-focus-within:bg-gray-100"
               preserveAspectRatio="none"
               stroke="currentColor"
               fill="none"
@@ -96,7 +100,7 @@ export default function Page() {
             >
               <path
                 vectorEffect="non-scaling-stroke"
-                strokeWidth={1}
+                strokeWidth={4}
                 d="M0 0l200 200M0 200L200 0"
               />
             </svg>
@@ -115,7 +119,23 @@ export default function Page() {
         </div>
       </div>
 
-      <div className="flex justify-between gap-8">
+      {processedBlob ? (
+        <span className="isolate inline-flex rounded-md shadow-sm">
+          <button
+            className="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+            onClick={saveFile}
+          >
+            Save
+          </button>
+
+          <button
+            className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
+            onClick={clearFile}
+          >
+            Clear
+          </button>
+        </span>
+      ) : (
         <label
           className="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 font-mono cursor-pointer"
           htmlFor="color"
@@ -126,28 +146,10 @@ export default function Page() {
             id="color"
             type="color"
             value={color}
-            onChange={(event) => colorSet(event.target.value)}
+            onChange={handleColor}
           />
         </label>
-
-        {fileBlob && (
-          <span className="isolate inline-flex rounded-md shadow-sm">
-            <button
-              className="relative inline-flex items-center rounded-l-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-              onClick={saveFile}
-            >
-              Save
-            </button>
-
-            <button
-              className="relative -ml-px inline-flex items-center rounded-r-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-              onClick={clearFile}
-            >
-              Restart
-            </button>
-          </span>
-        )}
-      </div>
+      )}
     </div>
   );
 }
