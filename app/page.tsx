@@ -1,8 +1,6 @@
 "use client";
 
-import Image from "next/image";
 import { ChangeEvent, useState } from "react";
-import frame from "./frame_alt.png";
 
 async function applyMatteToImage(file: File, color: string) {
   const imageBitmap = await createImageBitmap(file);
@@ -106,17 +104,6 @@ export default function Page() {
             </svg>
           </label>
         )}
-
-        <div className="hidden absolute inset-0 w-full h-full md:flex pointer-events-none">
-          <Image
-            alt=""
-            draggable={false}
-            height={720}
-            priority
-            src={frame}
-            width={720}
-          />
-        </div>
       </div>
 
       {processedBlob ? (
